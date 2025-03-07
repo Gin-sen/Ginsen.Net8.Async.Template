@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Maxime Places",
+  "classifications": [ "Package", "Api", "Worker"],
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "identity": "Ginsen.Net8.Async.Template",
+  "name": "Ginsen.Net8.Async.Template",
+  "shortName": "ginsen-pkg-tpl",
+  "sourceName": "Ginsen.Net8.Async.Template",
+  "defaultName": "Net8.Async.Template",
+  "preferNameDirectory": true,
+  "guids": [
+    "4ECD6C1D-2ADF-4B60-B601-76DBD58AF47A",
+    "255C7B1F-D5E2-4F4E-87CA-DD5F3E5A9433",
+    "70026D66-8091-4D20-A116-4CB3E6C0243D",
+    "F3B71EF2-8A1B-4FAE-832A-6768ABF58AD7",
+    "932D4B0D-C202-402E-AFA2-E45E287A3272"
+  ],
+  "symbols": {
+    "includeTest": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true"
+    },
+    "includeTemplate": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true"
+    },
+    "fullNameDockerService": {
+      "type": "derived",
+      "valueSource": "name", // name -> pointe sur le nom du nouveau projet
+      "valueTransform": "lc",
+      "replaces": "ginsen.net8.async.template"
+    },
+    "fullNameDockerImage": {
+      "type": "derived",
+      "valueSource": "name", // name -> pointe sur le nom du nouveau projet
+      "valueTransform": "dotToDashLowerCase",
+      "replaces": "ginsen-net8-async-template"
+    },
+    "chartFolderRename": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "dotToDashLowerCase",
+      "fileRename": "ginsen-net8-async-template"
+    }
+  },
+  "forms": {
+    "dotToDashLowerCase": {
+      "identifier": "chain",
+      "steps": [ "dotToDash", "lc" ] // An array of names of other transformations (applied in the order they appear in the array)
+    },
+    "dotToNull": {
+      "identifier": "replace",
+      "pattern": "\\.", // A regular expression matching the characters to replace
+      "replacement": "" // The replacement for the matched characters
+    },
+    "chainedFolder": {
+      "identifier": "chain",
+      "steps": [ "dotToDash", "lc" ]
+    },
+    "dotToDash": {
+      "identifier": "replace",
+      "pattern": "\\.",
+      "replacement": "-"
+    },
+    "lc": {
+      "identifier": "lowerCase"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!includeTest)",
+          "exclude": [ "*.Tests/**/*" ]
+        },
+        {
+          "condition": "includeTemplate",
+          "include": [ ".template.config/template.json" ]
+        },
+        {
+          "exclude": [
+            "**/[Bb]in/**",
+            "**/[Oo]bj/**",
+            "**/*.lock.json",
+            "**/.vs/**",
+            "**/.git/**"
+          ]
+        }
+      ]
+    }
+  ]
+}

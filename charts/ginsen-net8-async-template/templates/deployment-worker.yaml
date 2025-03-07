@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ginsen-net8-async-template.fullname-worker" . }}
+  labels:
+    {{- include "ginsen-net8-async-template.labels-worker" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.worker.enabled }}
+  replicas: {{ .Values.replicaCount.worker }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ginsen-net8-async-template.selectorLabels-worker" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations.worker }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ginsen-net8-async-template.labels-worker" . | nindent 8 }}
+        {{- with .Values.podLabels.worker }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ginsen-net8-async-template.serviceAccountName-worker" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext.worker | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-worker
+          securityContext:
+            {{- toYaml .Values.securityContext.worker | nindent 12 }}
+          image: "{{ .Values.image.repository.worker }}:{{ .Values.image.tag.worker | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources.worker | nindent 12 }}
+          {{- with .Values.volumeMounts.worker }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes.worker }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector.worker }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity.worker }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations.worker }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

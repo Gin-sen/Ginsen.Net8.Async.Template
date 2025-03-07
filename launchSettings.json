@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "ginsen.net8.async.template.api",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
+      "serviceActions": {
+        "ginsen.net8.async.template.api": "StartDebugging",
+        "ginsen.net8.async.template.worker": "StartDebugging"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  ginsen.net8.async.template.api:
+    image: ${DOCKER_REGISTRY-}ginsen-net8-async-template-api
+    build:
+      context: .
+      dockerfile: Ginsen.Net8.Async.Template.Api/Dockerfile
+
+  ginsen.net8.async.template.worker:
+    image: ${DOCKER_REGISTRY-}ginsen-net8-async-template-worker
+    build:
+      context: .
+      dockerfile: Ginsen.Net8.Async.Template.Worker/Dockerfile
+      

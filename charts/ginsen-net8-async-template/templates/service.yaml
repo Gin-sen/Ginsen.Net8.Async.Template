@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+  labels:
+    {{- include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.api.type }}
+  ports:
+    - port: {{ .Values.service.api.port }}
+      targetPort: {{ .Values.service.api.containerPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "ginsen-net8-async-template.selectorLabels-api" . | nindent 4 }}

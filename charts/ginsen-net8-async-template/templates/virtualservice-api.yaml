@@ -1,0 +1,29 @@
+{{- if .Values.istio.api.enabled -}}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+  labels:
+    {{ include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+spec:
+  hosts:
+  {{ range .Values.istio.api.hosts }}
+    - {{ . }}
+  {{- end }}
+  gateways:
+  {{ range .Values.istio.api.gateways }}
+    - {{ . }}
+  {{- end }}
+  http:
+  - name: "all-routes"
+    match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: {{ include "ginsen-net8-async-template.fullname-api" . }}
+        # host: {{ printf "%s.%s.svc.cluster.local" .Values.service.name .Release.Namespace }}
+        # subsets: {{ include "ginsen-net8-async-template.fullname" . }}
+        port: 
+          number: {{ .Values.service.api.port | int }}
+{{- end }}

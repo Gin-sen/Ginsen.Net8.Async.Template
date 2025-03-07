@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "ginsen-net8-async-template.fullname-api" . }}-test-connection"
+  labels:
+    {{- include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "ginsen-net8-async-template.fullname-api" . }}:{{ .Values.service.api.port }}']
+  restartPolicy: Never

@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+
+env:
+  DOTNET_VERSION: '8.0.X' # The .NET SDK version to use
+    
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push Api
+        uses: docker/build-push-action@v6
+        with:
+          file: Ginsen.Net8.Async.Template.Api/Dockerfile
+          context: .
+          push: false
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-template-api:latest
+      - name: Build and push Worker
+        uses: docker/build-push-action@v6
+        with:
+          file: Ginsen.Net8.Async.Template.Worker/Dockerfile
+          context: .
+          push: false
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-template-worker:latest
+
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+         dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install dependencies
+        run: dotnet restore Ginsen.Net8.Async.Template.Template.csproj
+      - name: Build
+        run: dotnet pack --no-restore Ginsen.Net8.Async.Template.Template.csproj

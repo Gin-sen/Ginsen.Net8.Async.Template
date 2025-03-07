@@ -1,0 +1,13 @@
+services:
+  ginsen.net8.async.template.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "8082:8080"
+
+  ginsen.net8.async.template.worker:
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+    # ports:
+    #   - "8081:8080"
