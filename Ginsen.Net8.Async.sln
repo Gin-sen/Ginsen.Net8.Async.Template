@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -14,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "http", "http", "{F3B71EF2-8
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginsen.Net8.Async.Milestone.Infrastructure", "Ginsen.Net8.Async.Milestone.Infrastructure\Ginsen.Net8.Async.Milestone.Infrastructure.csproj", "{49123587-D192-4D62-9D16-FD6E5F20B9A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginsen.Net8.Async.Milestone.Contracts.Http", "Ginsen.Net8.Async.Milestone.Contracts.Http\Ginsen.Net8.Async.Milestone.Contracts.Http.csproj", "{02870161-EA92-4406-AB89-D19277E4E5AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginsen.Net8.Async.Milestone.Contracts.Messaging", "Ginsen.Net8.Async.Milestone.Contracts.Messaging\Ginsen.Net8.Async.Milestone.Contracts.Messaging.csproj", "{11C32B1E-C25C-4962-96D9-DA275AA53ABD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +60,22 @@ Global
 		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|x64.ActiveCfg = Release|Any CPU
 		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|x64.Build.0 = Release|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Debug|x64.Build.0 = Debug|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Release|x64.ActiveCfg = Release|Any CPU
+		{02870161-EA92-4406-AB89-D19277E4E5AE}.Release|x64.Build.0 = Release|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|x64.Build.0 = Debug|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Release|x64.ActiveCfg = Release|Any CPU
+		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
