@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Maxime Places",
-  "classifications": [ "Package", "Api", "Worker"],
+  "classifications": [ "Milestone", "Api", "Worker"],
   "tags": {
     "language": "C#",
     "type": "solution"
@@ -10,22 +10,18 @@
   "name": "Ginsen.Net8.Async.Milestone",
   "shortName": "ginsen-pkg-tpl",
   "sourceName": "Ginsen.Net8.Async.Milestone",
-  "defaultName": "Net8.Async.Milestone",
+  "defaultName": "Net8.Async.Exemple",
   "preferNameDirectory": true,
   "guids": [
     "4ECD6C1D-2ADF-4B60-B601-76DBD58AF47A",
     "255C7B1F-D5E2-4F4E-87CA-DD5F3E5A9433",
     "70026D66-8091-4D20-A116-4CB3E6C0243D",
     "F3B71EF2-8A1B-4FAE-832A-6768ABF58AD7",
+    "49123587-D192-4D62-9D16-FD6E5F20B9A9",
     "932D4B0D-C202-402E-AFA2-E45E287A3272"
   ],
   "symbols": {
     "includeTest": {
-      "type": "parameter",
-      "datatype": "bool",
-      "defaultValue": "true"
-    },
-    "includeTemplate": {
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "true"
