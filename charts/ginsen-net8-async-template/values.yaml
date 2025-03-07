@@ -1,4 +1,4 @@
-# Default values for ginsen-net8-async-template.
+# Default values for ginsen-net8-async-milestone.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -10,8 +10,8 @@ replicaCount:
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
   repository:
-    api: ginsen-net8-async-template-api
-    worker: ginsen-net8-async-template-worker
+    api: ginsen-net8-async-milestone-api
+    worker: ginsen-net8-async-milestone-worker
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -39,7 +39,7 @@ serviceAccount:
     # Annotations to add to the service account
     annotations: {}
     # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
+    # If not set and create is true, a name is generated using the fullname milestone
     name: ""
   worker:
     # Specifies whether a service account should be created
@@ -49,7 +49,7 @@ serviceAccount:
     # Annotations to add to the service account
     annotations: {}
     # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
+    # If not set and create is true, a name is generated using the fullname milestone
     name: ""
 
 # This is for setting Kubernetes Annotations to a Pod.

@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}
   labels:
-    {{- include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+    name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}
   minReplicas: {{ .Values.autoscaling.api.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.api.maxReplicas }}
   metrics:

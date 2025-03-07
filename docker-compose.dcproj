@@ -7,7 +7,7 @@
     <ProjectGuid>70026d66-8091-4d20-a116-4cb3e6c0243d</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>ginsen.net8.async.template.api</DockerServiceName>
+    <DockerServiceName>ginsen.net8.async.milestone.api</DockerServiceName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <ItemGroup>

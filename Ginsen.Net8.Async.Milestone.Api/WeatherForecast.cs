@@ -1,4 +1,4 @@
-namespace Ginsen.Net8.Async.Template.Api
+namespace Ginsen.Net8.Async.Milestone.Api
 {
   public class WeatherForecast
   {

@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-Ginsen.Net8.Async.Template.Worker-fdf0d037-3cc4-41b4-bb9e-3afa64d930d4</UserSecretsId>
+    <UserSecretsId>dotnet-Ginsen.Net8.Async.Milestone.Worker-fdf0d037-3cc4-41b4-bb9e-3afa64d930d4</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>

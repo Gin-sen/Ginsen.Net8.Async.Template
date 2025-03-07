@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}
   labels:
-    {{- include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -35,7 +35,7 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ include "ginsen-net8-async-template.fullname-api" $ }}
+                name: {{ include "ginsen-net8-async-milestone.fullname-api" $ }}
                 port:
                   number: {{ $.Values.service.api.port }}
           {{- end }}

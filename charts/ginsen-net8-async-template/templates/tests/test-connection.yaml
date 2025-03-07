@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "ginsen-net8-async-template.fullname-api" . }}-test-connection"
+  name: "{{ include "ginsen-net8-async-milestone.fullname-api" . }}-test-connection"
   labels:
-    {{- include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "ginsen-net8-async-template.fullname-api" . }}:{{ .Values.service.api.port }}']
+      args: ['{{ include "ginsen-net8-async-milestone.fullname-api" . }}:{{ .Values.service.api.port }}']
   restartPolicy: Never

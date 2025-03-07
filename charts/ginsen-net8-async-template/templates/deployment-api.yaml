@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}
   labels:
-    {{- include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.api.enabled }}
   replicas: {{ .Values.replicaCount.api }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "ginsen-net8-async-template.selectorLabels-api" . | nindent 6 }}
-  template:
+      {{- include "ginsen-net8-async-milestone.selectorLabels-api" . | nindent 6 }}
+  milestone:
     metadata:
       {{- with .Values.podAnnotations.api }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "ginsen-net8-async-template.labels-api" . | nindent 8 }}
+        {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 8 }}
         {{- with .Values.podLabels.api }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "ginsen-net8-async-template.serviceAccountName-api" . }}
+      serviceAccountName: {{ include "ginsen-net8-async-milestone.serviceAccountName-api" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext.api | nindent 8 }}
       containers:

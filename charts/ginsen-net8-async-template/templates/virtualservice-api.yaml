@@ -2,9 +2,9 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: {{ include "ginsen-net8-async-template.fullname-api" . }}
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}
   labels:
-    {{ include "ginsen-net8-async-template.labels-api" . | nindent 4 }}
+    {{ include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
 spec:
   hosts:
   {{ range .Values.istio.api.hosts }}
@@ -21,9 +21,9 @@ spec:
         prefix: "/"
     route:
     - destination:
-        host: {{ include "ginsen-net8-async-template.fullname-api" . }}
+        host: {{ include "ginsen-net8-async-milestone.fullname-api" . }}
         # host: {{ printf "%s.%s.svc.cluster.local" .Values.service.name .Release.Namespace }}
-        # subsets: {{ include "ginsen-net8-async-template.fullname" . }}
+        # subsets: {{ include "ginsen-net8-async-milestone.fullname" . }}
         port: 
           number: {{ .Values.service.api.port | int }}
 {{- end }}

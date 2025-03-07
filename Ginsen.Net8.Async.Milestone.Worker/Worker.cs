@@ -1,4 +1,4 @@
-namespace Ginsen.Net8.Async.Template.Worker
+namespace Ginsen.Net8.Async.Milestone.Worker
 {
   public class Worker : BackgroundService
   {

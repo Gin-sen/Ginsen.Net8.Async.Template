@@ -1,13 +1,26 @@
 services:
-  ginsen.net8.async.template.api:
+  ginsen.net8.async.milestone.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8082:8080"
 
-  ginsen.net8.async.template.worker:
+  ginsen.net8.async.milestone.worker:
     environment:
       - DOTNET_ENVIRONMENT=Docker
     # ports:
     #   - "8081:8080"
+
+  rabbit:
+    hostname: 'rabbit'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbit-data:/var/lib/rabbitmq/mnesia/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5672"]
+      interval: 30s
+      timeout: 30s
+      retries: 3

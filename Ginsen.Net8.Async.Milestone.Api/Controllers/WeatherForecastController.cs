@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
 
-namespace Ginsen.Net8.Async.Template.Api.Controllers
+namespace Ginsen.Net8.Async.Milestone.Api.Controllers
 {
   [ApiController]
   [Route("[controller]")]

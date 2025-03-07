@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Ginsen.Net8.Async.Template.Worker": {
+    "Ginsen.Net8.Async.Milestone.Worker": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

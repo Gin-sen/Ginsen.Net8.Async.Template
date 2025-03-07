@@ -24,19 +24,19 @@ jobs:
       - name: Build and push Api
         uses: docker/build-push-action@v6
         with:
-          file: Ginsen.Net8.Async.Template.Api/Dockerfile
+          file: Ginsen.Net8.Async.Milestone.Api/Dockerfile
           context: .
           push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-template-api:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-api:latest
       - name: Build and push Worker
         uses: docker/build-push-action@v6
         with:
-          file: Ginsen.Net8.Async.Template.Worker/Dockerfile
+          file: Ginsen.Net8.Async.Milestone.Worker/Dockerfile
           context: .
           push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-template-worker:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-worker:latest
 
-  template:
+  milestone:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -45,6 +45,6 @@ jobs:
         with:
          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Install dependencies
-        run: dotnet restore Ginsen.Net8.Async.Template.Template.csproj
+        run: dotnet restore Ginsen.Net8.Async.Milestone.Milestone.csproj
       - name: Build
-        run: dotnet pack --no-restore Ginsen.Net8.Async.Template.Template.csproj
+        run: dotnet pack --no-restore Ginsen.Net8.Async.Milestone.Milestone.csproj

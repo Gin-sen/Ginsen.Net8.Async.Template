@@ -6,11 +6,11 @@
     "language": "C#",
     "type": "solution"
   },
-  "identity": "Ginsen.Net8.Async.Template",
-  "name": "Ginsen.Net8.Async.Template",
+  "identity": "Ginsen.Net8.Async.Milestone",
+  "name": "Ginsen.Net8.Async.Milestone",
   "shortName": "ginsen-pkg-tpl",
-  "sourceName": "Ginsen.Net8.Async.Template",
-  "defaultName": "Net8.Async.Template",
+  "sourceName": "Ginsen.Net8.Async.Milestone",
+  "defaultName": "Net8.Async.Milestone",
   "preferNameDirectory": true,
   "guids": [
     "4ECD6C1D-2ADF-4B60-B601-76DBD58AF47A",
@@ -34,19 +34,19 @@
       "type": "derived",
       "valueSource": "name", // name -> pointe sur le nom du nouveau projet
       "valueTransform": "lc",
-      "replaces": "ginsen.net8.async.template"
+      "replaces": "ginsen.net8.async.milestone"
     },
     "fullNameDockerImage": {
       "type": "derived",
       "valueSource": "name", // name -> pointe sur le nom du nouveau projet
       "valueTransform": "dotToDashLowerCase",
-      "replaces": "ginsen-net8-async-template"
+      "replaces": "ginsen-net8-async-milestone"
     },
     "chartFolderRename": {
       "type": "derived",
       "valueSource": "name",
       "valueTransform": "dotToDashLowerCase",
-      "fileRename": "ginsen-net8-async-template"
+      "fileRename": "ginsen-net8-async-milestone"
     }
   },
   "forms": {
@@ -80,16 +80,13 @@
           "exclude": [ "*.Tests/**/*" ]
         },
         {
-          "condition": "includeTemplate",
-          "include": [ ".template.config/template.json" ]
-        },
-        {
           "exclude": [
             "**/[Bb]in/**",
             "**/[Oo]bj/**",
             "**/*.lock.json",
             "**/.vs/**",
-            "**/.git/**"
+            "**/.git/**",
+            "!**/Ginsen.Net8.Async.Milestone*/**"
           ]
         }
       ]

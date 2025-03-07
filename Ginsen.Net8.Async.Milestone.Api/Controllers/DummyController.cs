@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ginsen.Net8.Async.Template;
+using Ginsen.Net8.Async.Milestone;
 using System.Net;
 
-namespace Ginsen.Net8.Async.Template.Api.Controllers
+namespace Ginsen.Net8.Async.Milestone.Api.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]

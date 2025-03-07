@@ -1,13 +1,28 @@
 services:
-  ginsen.net8.async.template.api:
-    image: ${DOCKER_REGISTRY-}ginsen-net8-async-template-api
+  ginsen.net8.async.milestone.api:
+    image: ${DOCKER_REGISTRY-}ginsen-net8-async-milestone-api
     build:
       context: .
-      dockerfile: Ginsen.Net8.Async.Template.Api/Dockerfile
+      dockerfile: Ginsen.Net8.Async.Milestone.Api/Dockerfile
+    networks:
+      - backend-net
 
-  ginsen.net8.async.template.worker:
-    image: ${DOCKER_REGISTRY-}ginsen-net8-async-template-worker
+
+  ginsen.net8.async.milestone.worker:
+    image: ${DOCKER_REGISTRY-}ginsen-net8-async-milestone-worker
     build:
       context: .
-      dockerfile: Ginsen.Net8.Async.Template.Worker/Dockerfile
+      dockerfile: Ginsen.Net8.Async.Milestone.Worker/Dockerfile
+    networks:
+      - backend-net
+
       
+  rabbit:
+    image: rabbitmq:4-management
+    networks:
+      - backend-net
+
+
+networks:
+  backend-net:
+    driver: bridge

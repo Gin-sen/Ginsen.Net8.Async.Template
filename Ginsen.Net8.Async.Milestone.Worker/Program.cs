@@ -1,4 +1,4 @@
-using Ginsen.Net8.Async.Template.Worker;
+using Ginsen.Net8.Async.Milestone.Worker;
 using Serilog;
 try
 {

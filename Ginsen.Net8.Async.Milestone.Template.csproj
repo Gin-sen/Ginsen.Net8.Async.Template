@@ -3,8 +3,8 @@
   <PropertyGroup>
     <PackageType>Template</PackageType>
     <PackageVersion>1.0</PackageVersion>
-    <PackageId>Ginsen.Net8.Async.Template</PackageId>
-    <Title>.Net8 Async Template</Title>
+    <PackageId>Ginsen.Net8.Async.Milestone</PackageId>
+    <Title>.Net8 Async Milestone</Title>
     <Authors>Gin-sen</Authors>
     <Description>Templates to use when creating an Api and a Worker listening to some queues.</Description>
     <PackageTags>dotnet-new;templates;api;worker;queues</PackageTags>
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include=".\**\*" Exclude=".\**\bin\**;.\**\obj\**" />
+    <Content Include=".\**\*" Exclude=".\**\bin\**;.\**\obj\**;.\Ginsen.Net8.Async.Milestone*\**" />
     <Compile Remove="**\*" />
     <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
