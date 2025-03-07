@@ -45,6 +45,6 @@ jobs:
         with:
          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Install dependencies
-        run: dotnet restore Ginsen.Net8.Async.Milestone.Milestone.csproj
+        run: dotnet restore Ginsen.Net8.Async.Milestone.Template.csproj
       - name: Build
-        run: dotnet pack --no-restore Ginsen.Net8.Async.Milestone.Milestone.csproj
+        run: dotnet pack --no-restore Ginsen.Net8.Async.Milestone.Template.csproj
