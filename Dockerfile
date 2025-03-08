@@ -16,10 +16,10 @@ COPY ["Ginsen.Net8.Async.Milestone.Contracts.Messaging/Ginsen.Net8.Async.Milesto
 COPY ["Ginsen.Net8.Async.Milestone.Infrastructure/Ginsen.Net8.Async.Milestone.Infrastructure.csproj", "Ginsen.Net8.Async.Milestone.Infrastructure/"]
 COPY ["Ginsen.Net8.Async.Milestone.Worker/Ginsen.Net8.Async.Milestone.Worker.csproj", "Ginsen.Net8.Async.Milestone.Worker/"]
 RUN dotnet restore "./Ginsen.Net8.Async.Milestone.Api/Ginsen.Net8.Async.Milestone.Api.csproj" && \
-dotnet restore "./Ginsen.Net8.Async.Milestone.Worker/Ginsen.Net8.Async.Milestone.Worker.csproj"
+  dotnet restore "./Ginsen.Net8.Async.Milestone.Worker/Ginsen.Net8.Async.Milestone.Worker.csproj"
 COPY --exclude=appsettings*.json . .
 
-FROM restore AS build-worker
+FROM ${RESTORE_HASH:-restore} AS build-worker
 ARG BUILD_CONFIGURATION=Release
 COPY ["Ginsen.Net8.Async.Milestone.Worker/appsettings*.json", "Ginsen.Net8.Async.Milestone.Worker/"]
 WORKDIR "/src/Ginsen.Net8.Async.Milestone.Worker"
@@ -34,7 +34,7 @@ WORKDIR /app
 COPY --from=publish-worker /app/publish .
 ENTRYPOINT ["dotnet", "Ginsen.Net8.Async.Milestone.Worker.dll"]
 
-FROM restore AS build-api
+FROM ${RESTORE_HASH:-restore} AS build-api
 ARG BUILD_CONFIGURATION=Release
 COPY ["Ginsen.Net8.Async.Milestone.Api/appsettings*.json", "Ginsen.Net8.Async.Milestone.Api/"]
 WORKDIR "/src/Ginsen.Net8.Async.Milestone.Api"
