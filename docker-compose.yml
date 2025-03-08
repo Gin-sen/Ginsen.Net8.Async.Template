@@ -27,6 +27,11 @@ services:
       - backend-net
 
 
+  postgres:
+    image: postgres
+    networks:
+      - backend-net
+
 networks:
   backend-net:
     driver: bridge
