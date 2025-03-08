@@ -41,7 +41,7 @@ jobs:
           context: .
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone:latest
-          build-args: --target restore
+          target: restore
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
 
@@ -52,7 +52,7 @@ jobs:
           context: .
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-api:latest
-          build-args: --target final-api
+          target: final-api
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
 
@@ -63,7 +63,7 @@ jobs:
           context: .
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-worker:latest
-          build-args: --target final-worker
+          target: final-worker
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
 
