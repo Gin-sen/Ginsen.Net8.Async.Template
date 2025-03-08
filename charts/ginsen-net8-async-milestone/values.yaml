@@ -46,7 +46,7 @@ monitor:
       metricsContainerPort: 52325
     istio:
       enabled: true
-      hosts: ["monitor.mainframe.local"]
+      hosts: ["monitor-api.mainframe.local"]
       gateways: ["istio-ingress/istio-ingress-gateway"]
     resources:
       requests:
@@ -65,7 +65,7 @@ monitor:
       metricsContainerPort: 52325
     istio:
       enabled: true
-      hosts: ["monitor.mainframe.local"]
+      hosts: ["monitor-worker.mainframe.local"]
       gateways: ["istio-ingress/istio-ingress-gateway"]
     resources:
       requests:

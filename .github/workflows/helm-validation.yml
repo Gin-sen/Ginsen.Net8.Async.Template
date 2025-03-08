@@ -22,8 +22,8 @@ jobs:
     - name: Setup Helm
       uses: azure/setup-helm@v1
       with:
-        version: 'v3.6.3'
+        version: 'v3.16.3'
     - name: Helm lint
       run: helm lint charts/ginsen-net8-async-milestone
     - name: Helm template
-      run: helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --dry-run=client
+      run: helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --debug
