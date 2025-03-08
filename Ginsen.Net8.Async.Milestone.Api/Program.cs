@@ -8,12 +8,12 @@ try
 {
   var builder = WebApplication.CreateBuilder(args);
   
-  builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
   builder.Services.AddSerilog((services, lc) =>
   {
     lc.ReadFrom.Configuration(builder.Configuration)
       .Enrich.FromLogContext();
   });
+  builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
   builder.Services.AddHealthChecks();
   builder.Services.AddControllers();
   builder.Services.AddProblemDetails();
