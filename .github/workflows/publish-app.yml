@@ -2,6 +2,15 @@ name: ci-milestone
 
 on:
   push:
+    branches: [ main ]
+    paths:
+    - '**.cs'
+    - '**.csproj'
+  pull_request:
+    branches: [ main ]
+    paths:
+    - '**.cs'
+    - '**.csproj'
 
 env:
   DOTNET_VERSION: '8.0.X' # The .NET SDK version to use
