@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
-      DOCKER_IMAGE: Gin-sen/ginsen-net8-async-milestone
+      DOCKER_IMAGE: gin-sen/ginsen-net8-async-milestone
       BUILD_CACHE: /home/runner/.docker/buildkit
     steps:
       - name: Checkout
