@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # tmp crt for docker compose ELK cluster
 ca.crt
+
+.env
