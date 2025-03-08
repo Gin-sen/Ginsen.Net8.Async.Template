@@ -2,11 +2,17 @@
 
 Milestone .Net Core 8 pour la création de package.
 
-# Lancement des implémentations d'exemple du package
+## Lancement des implémentations d'exemple du package
+
+Créer un ficher `.env` :
+
+```bash
+cp .env.exemple .env
+```
 
 Lancer la commande :
 
-`docker compose up -d`
+`docker compose up -d --build`
 
 ## Utiliser le templating de dotnet
 
