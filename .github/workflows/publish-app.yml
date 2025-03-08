@@ -10,7 +10,8 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: ci/${{ github.job }}
+      REGISTRY: ghcr.io
+      DOCKER_IMAGE: Gin-sen/ginsen-net8-async-milestone
       BUILD_CACHE: /home/runner/.docker/buildkit
     steps:
       - name: Checkout
@@ -18,9 +19,9 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -39,8 +40,8 @@ jobs:
         with:
           file: Dockerfile
           context: .
-          push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-api:latest
+          push: true
+          tags: ${{ env.REGISTRY }}/${{env.DOCKER_IMAGE}}-api:latest
           target: final-api
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
@@ -50,8 +51,8 @@ jobs:
         with:
           file: Dockerfile
           context: .
-          push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-worker:latest
+          push: true
+          tags: ${{ env.REGISTRY }}/${{env.DOCKER_IMAGE}}-worker:latest
           target: final-worker
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
