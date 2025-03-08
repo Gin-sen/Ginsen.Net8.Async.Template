@@ -34,17 +34,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build and push Restore
-        uses: docker/build-push-action@v6
-        with:
-          file: Dockerfile
-          context: .
-          push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone:latest
-          target: restore
-          cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
-          cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
-
       - name: Build and push Api
         uses: docker/build-push-action@v6
         with:
@@ -52,8 +41,6 @@ jobs:
           context: .
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-api:latest
-          build-args: |
-            RESTORE_HASH=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone:latest)
           target: final-api
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max
@@ -65,8 +52,6 @@ jobs:
           context: .
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone-worker:latest
-          build-args: |
-            RESTORE_HASH=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ secrets.DOCKERHUB_USERNAME }}/ginsen-net8-async-milestone:latest)
           target: final-worker
           cache-from: type=local,src=${{ runner.temp }}/.buildx-cache
           cache-to: type=local,dest=${{ runner.temp }}/.buildx-cache-new,mode=max

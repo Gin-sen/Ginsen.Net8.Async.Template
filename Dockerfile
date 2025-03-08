@@ -34,7 +34,7 @@ WORKDIR /app
 COPY --from=publish-worker /app/publish .
 ENTRYPOINT ["dotnet", "Ginsen.Net8.Async.Milestone.Worker.dll"]
 
-FROM ${RESTORE_HASH:-restore} AS build-api
+FROM restore AS build-api
 ARG BUILD_CONFIGURATION=Release
 COPY ["Ginsen.Net8.Async.Milestone.Api/appsettings*.json", "Ginsen.Net8.Async.Milestone.Api/"]
 WORKDIR "/src/Ginsen.Net8.Async.Milestone.Api"
