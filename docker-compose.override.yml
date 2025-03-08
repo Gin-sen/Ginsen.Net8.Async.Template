@@ -1,7 +1,7 @@
 services:
   ginsen.net8.async.milestone.api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Integration
+      - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8082:8080"
