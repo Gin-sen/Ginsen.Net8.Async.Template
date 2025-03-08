@@ -19,7 +19,7 @@ RUN dotnet restore "./Ginsen.Net8.Async.Milestone.Api/Ginsen.Net8.Async.Mileston
   dotnet restore "./Ginsen.Net8.Async.Milestone.Worker/Ginsen.Net8.Async.Milestone.Worker.csproj"
 COPY --exclude=appsettings*.json . .
 
-FROM ${RESTORE_HASH:-restore} AS build-worker
+FROM restore AS build-worker
 ARG BUILD_CONFIGURATION=Release
 COPY ["Ginsen.Net8.Async.Milestone.Worker/appsettings*.json", "Ginsen.Net8.Async.Milestone.Worker/"]
 WORKDIR "/src/Ginsen.Net8.Async.Milestone.Worker"
