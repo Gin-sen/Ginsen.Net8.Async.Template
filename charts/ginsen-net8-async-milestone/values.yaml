@@ -10,24 +10,71 @@ replicaCount:
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
   repository:
-    api: ginsen-net8-async-milestone-api
-    worker: ginsen-net8-async-milestone-worker
+    api: ghcr.io/gin-sen/ginsen-net8-async-milestone-api
+    worker: ghcr.io/gin-sen/ginsen-net8-async-milestone-worker
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag:
-    api: ""
-    worker: ""
+    api: "latest"
+    worker: "latest"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
 # This is to override the chart name.
-nameOverride:
-  api: ""
-  worker: ""
+nameOverride: ""
 fullnameOverride:
   api: ""
   worker: ""
+
+env:
+  api: []
+  worker: [] 
+  common:
+    - name: TZ
+      value: Europe/Paris
+
+# This is for seting up the dotnet-monitor sidecar
+monitor:
+  api:
+    enabled: true
+    service:
+      type: ClusterIP
+      port: 80
+      containerPort: 52323
+      metricsPort: 52325
+      metricsContainerPort: 52325
+    istio:
+      enabled: true
+      hosts: ["monitor.mainframe.local"]
+      gateways: ["istio-ingress/istio-ingress-gateway"]
+    resources:
+      requests:
+        cpu: 50m
+        memory: 32Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+  worker:
+    enabled: true
+    service:
+      type: ClusterIP
+      port: 80
+      containerPort: 52323
+      metricsPort: 52325
+      metricsContainerPort: 52325
+    istio:
+      enabled: true
+      hosts: ["monitor.mainframe.local"]
+      gateways: ["istio-ingress/istio-ingress-gateway"]
+    resources:
+      requests:
+        cpu: 50m
+        memory: 32Mi
+      limits:
+        cpu: 250m
+        memory: 256Mi
+
 
 #This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
@@ -55,7 +102,7 @@ serviceAccount:
 # This is for setting Kubernetes Annotations to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
 podAnnotations:
-  api: {}
+  api:
   worker: {}
 # This is for setting Kubernetes Labels to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -97,8 +144,14 @@ istio:
   worker: {}
 
 resources:
-  api: {}
-  worker: {}
+  api:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  worker:
+    limits:
+      cpu: 250m
+      memory: 512Mi
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -155,6 +208,26 @@ volumeMounts:
 # - name: foo
 #   mountPath: "/etc/foo"
 #   readOnly: true
+
+# Dotnet Monitor volumes on the output Deployment definition.
+volumesMonitor:
+  api: 
+    - name: diagvol
+      emptyDir: {}
+  worker: 
+    - name: diagvol
+      emptyDir: {}
+
+# Dotnet Monitor volumeMounts on the output Deployment definition.
+volumeMountsMonitor:
+  api: 
+  # if monitor.api.enabled is true then add the following volume mount
+    - mountPath: /diag
+      name: diagvol
+  worker: 
+  # if monitor.worker.enabled is true then add the following volume mount
+    - mountPath: /diag
+      name: diagvol
 
 nodeSelector:
   api: {}

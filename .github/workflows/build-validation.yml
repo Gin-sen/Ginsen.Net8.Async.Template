@@ -17,19 +17,15 @@ env:
 
 jobs:
   build:
-
-    name: build
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-
     - name: Install dependencies
       run: dotnet restore Ginsen.Net8.Async.sln
-      
-    - name: Build
+    - name: Build solution
       run: dotnet build --configuration Release --no-restore Ginsen.Net8.Async.sln

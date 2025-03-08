@@ -1,0 +1,27 @@
+{{- if and .Values.monitor.api.istio.enabled .Values.monitor.api.enabled  }}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}-monitor
+  labels:
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
+spec:
+  hosts:
+  {{- range .Values.monitor.api.istio.hosts }}
+    - {{ . }}
+  {{- end }}
+  gateways:
+  {{- range .Values.monitor.api.istio.gateways }}
+    - {{ . }}
+  {{- end }}
+  http:
+  - name: "monitor-routes"
+    match:
+    - uri:
+        prefix: "/"
+    route:
+    - destination:
+        host: {{ printf "%s-monitor.%s.svc.cluster.local" (include "ginsen-net8-async-milestone.fullname-api" .) .Release.Namespace }}
+        port: 
+          number: {{ .Values.monitor.api.service.port | int }}
+{{- end }}

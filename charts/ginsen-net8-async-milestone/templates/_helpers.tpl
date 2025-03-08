@@ -28,7 +28,7 @@
 {{- if .Values.fullnameOverride.api }}
 {{- .Values.fullnameOverride.api | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride.api }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- (printf "%s-api" .Release.Name) | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -82,7 +82,7 @@ Create the name of the service account to use
 {{- if .Values.fullnameOverride.worker }}
 {{- .Values.fullnameOverride.worker | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride.worker }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- (printf "%s-worker" .Release.Name) | trunc 63 | trimSuffix "-" }}
 {{- else }}

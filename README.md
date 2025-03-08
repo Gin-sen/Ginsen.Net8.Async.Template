@@ -37,3 +37,23 @@ lancez cette commande à la racine du répertoire :
 ```bash
 dotnet new uninstall .
 ```
+
+
+## Notes
+
+Conf pour prometheus :
+
+```yaml
+scrape_configs:
+- job_name: dotnet-monitor
+  honor_timestamps: true
+  scrape_interval: 2s
+  scrape_timeout: 2s
+  metrics_path: /metrics
+  scheme: http
+  kubernetes_sd_configs:
+    - role: pod
+      selectors:
+        - role: "pod"
+          label: "dotnet-monitor.io/monitor=true"
+```

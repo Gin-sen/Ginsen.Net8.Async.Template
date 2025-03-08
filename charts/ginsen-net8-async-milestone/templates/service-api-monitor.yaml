@@ -1,0 +1,17 @@
+{{- if and .Values.monitor.api.enabled .Values.monitor.api.enabled  }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}-monitor
+  labels:
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
+spec:
+  type: {{ .Values.monitor.api.service.type }}
+  ports:
+    - port: {{ .Values.monitor.api.service.port }}
+      targetPort: {{ .Values.monitor.api.service.containerPort }}
+      protocol: TCP
+      name: monitor
+  selector:
+    {{- include "ginsen-net8-async-milestone.selectorLabels-api" . | nindent 4 }}
+{{- end }}

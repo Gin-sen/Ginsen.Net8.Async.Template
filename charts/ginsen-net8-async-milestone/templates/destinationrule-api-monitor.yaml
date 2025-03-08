@@ -1,0 +1,16 @@
+{{- if and .Values.monitor.api.istio.enabled .Values.monitor.api.enabled }}
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: {{ include "ginsen-net8-async-milestone.fullname-api" . }}-monitor
+  labels:
+    {{- include "ginsen-net8-async-milestone.labels-api" . | nindent 4 }}
+spec: 
+  host: {{ printf "%s-monitor.%s.svc.cluster.local" (include "ginsen-net8-async-milestone.fullname-api" .) .Release.Namespace }}
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        httpCookie:
+          name: user
+          ttl: 900s
+{{- end }}
