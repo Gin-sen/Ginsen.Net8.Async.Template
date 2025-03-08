@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Contracts.Http/Ginsen.Net8.Async.Milestone.Contracts.Http.csproj" />
+    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Contracts.Messaging/Ginsen.Net8.Async.Milestone.Contracts.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

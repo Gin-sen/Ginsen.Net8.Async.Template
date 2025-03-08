@@ -2,7 +2,7 @@
 using Ginsen.Net8.Async.Milestone.Contracts.Http.V1.Dummies;
 using Asp.Versioning;
 
-namespace Ginsen.Net8.Async.Milestone.Api.Controllers
+namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
 {
   /// <summary>
   /// Controller for handling dummy operations.

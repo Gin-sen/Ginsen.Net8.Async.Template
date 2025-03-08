@@ -2,7 +2,7 @@ using Asp.Versioning;
 using Ginsen.Net8.Async.Milestone.Contracts.Http.V1.Weather;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ginsen.Net8.Async.Milestone.Api.Controllers
+namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
 {
   /// <summary>
   /// Controller to handle weather forecast requests.

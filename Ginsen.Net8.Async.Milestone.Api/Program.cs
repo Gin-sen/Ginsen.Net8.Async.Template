@@ -17,7 +17,7 @@ try
   builder.Services.AddHealthChecks();
   builder.Services.AddControllers();
   builder.Services.AddProblemDetails();
-  builder.Services.AddEndpointsApiExplorer();
+  // builder.Services.AddEndpointsApiExplorer();
   builder.Services.AddApiVersioning(
             options =>
             {

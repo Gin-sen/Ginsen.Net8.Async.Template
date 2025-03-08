@@ -1,7 +1,8 @@
 using Asp.Versioning;
+using Ginsen.Net8.Async.Milestone.Contracts.Messaging.V1;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ginsen.Net8.Async.Milestone.Api.Controllers
+namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
 {
     /// <summary>
     /// Controller for handling RabbitMQ related operations.
@@ -25,13 +26,13 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers
         /// Publish a RabbitMQ message after some treatment.
         /// </summary>
         [HttpPost("Publish")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FooMessage))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PublishAsync(
-            [FromBody] string message,
+            [FromBody] FooMessage message,
             CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(message))
+            if (string.IsNullOrWhiteSpace(message.Content))
             {
                 if (_logger.IsEnabled(LogLevel.Warning))
                 {
@@ -46,9 +47,7 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers
             {
                 _logger.LogInformation("Message sent to RabbitMQ");
             }
-
-
-            return Ok();
+            return Ok(message);
         }
     }
 }

@@ -44,7 +44,6 @@
     },
     "WSL": {
       "commandName": "WSL2",
-      "workingDirectory": "/home/gin-sen/git/prog/Ginsen.Net8.Async.Template",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5106/swagger",
       "environmentVariables": {
