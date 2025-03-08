@@ -1,18 +1,29 @@
-using Microsoft.AspNetCore.Http;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ginsen.Net8.Async.Milestone.Api.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// Controller for handling RabbitMQ related operations.
+    /// </summary>
+    [ApiVersion(1)]
+    [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class RabbitMQController : ControllerBase
     {
         private readonly ILogger<RabbitMQController> _logger;
+
+        /// <summary>
+        /// Controller for handling RabbitMQ related operations.
+        /// </summary>
         public RabbitMQController(ILogger<RabbitMQController> logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// Publish a RabbitMQ message after some treatment.
+        /// </summary>
         [HttpPost("Publish")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -26,7 +37,7 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers
                 {
                     _logger.LogWarning("Message is empty");
                 }
-                return BadRequest();
+                return BadRequest("Message is empty");
             }
             // do something
             await Task.Delay(1_000, cancellationToken);

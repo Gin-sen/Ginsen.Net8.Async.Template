@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ginsen.Net8.Async.Milestone;
-using System.Net;
+using Ginsen.Net8.Async.Milestone.Contracts.Http.V1.Dummies;
+using Asp.Versioning;
 
 namespace Ginsen.Net8.Async.Milestone.Api.Controllers
 {
-  [Route("api/[controller]")]
+  [ApiVersion(1)]
+  [Route("api/v{v:apiVersion}/[controller]")]
   [ApiController]
   public class DummyController : ControllerBase
   {
@@ -15,6 +16,8 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers
     }
 
     [HttpGet("GetOk")]
+    [Produces( "application/json" )]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetDummy))]
     public async Task<IActionResult> GetOkAsync(
       CancellationToken cancellationToken)
     {
@@ -23,7 +26,7 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers
         _logger.LogInformation("Ok");
       }
       await Task.Delay(1_000, cancellationToken);
-      return Ok(new {});
+      return Ok(new GetDummy());
     }
   }
 }
