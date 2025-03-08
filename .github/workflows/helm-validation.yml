@@ -26,7 +26,4 @@ jobs:
     - name: Helm lint
       run: helm lint charts/ginsen-net8-async-milestone
     - name: Helm template
-      run: >
-        helm template 
-          ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone 
-          -n test --dry-run=client
+      run: helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --dry-run=client
