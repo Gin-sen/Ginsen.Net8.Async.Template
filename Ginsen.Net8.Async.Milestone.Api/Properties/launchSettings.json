@@ -3,9 +3,10 @@
     "http": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "http://localhost:5106/swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5106"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5106"
@@ -43,13 +44,14 @@
     },
     "WSL": {
       "commandName": "WSL2",
+      "workingDirectory": "/home/gin-sen/git/prog/Ginsen.Net8.Async.Template",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5106/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_URLS": "http://localhost:5106"
       },
-      "distributionName": ""
+      "distributionName": "kali-linux"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",

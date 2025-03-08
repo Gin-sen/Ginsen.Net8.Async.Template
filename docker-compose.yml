@@ -1,21 +1,25 @@
 services:
   ginsen.net8.async.milestone.api:
-    image: ${DOCKER_REGISTRY-}ginsen-net8-async-milestone-api
+    image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-api:dev
     build:
       context: .
       dockerfile: Dockerfile
       target: final-api
+      args:
+        - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
       # dockerfile: Ginsen.Net8.Async.Milestone.Api/Dockerfile
     networks:
       - backend-net
 
 
   ginsen.net8.async.milestone.worker:
-    image: ${DOCKER_REGISTRY-}ginsen-net8-async-milestone-worker
+    image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-worker:dev
     build:
       context: .
       dockerfile: Dockerfile
       target: final-worker
+      args:
+        - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
       # dockerfile: Ginsen.Net8.Async.Milestone.Worker/Dockerfile
     networks:
       - backend-net
