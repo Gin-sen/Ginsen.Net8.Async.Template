@@ -8,8 +8,6 @@ on:
     - '**.csproj'
     - '**/Dockerfile'
     - '**/appsettings*.json'
-    paths-ignore:
-    - '**/appsettings.Development.json'
   pull_request:
     branches: [ main ]
     paths:
@@ -17,8 +15,6 @@ on:
     - '**.csproj'
     - '**/Dockerfile'
     - '**/appsettings*.json'
-    paths-ignore:
-    - '**/appsettings.Development.json'
 
 env:
   DOTNET_VERSION: '8.0.X' # The .NET SDK version to use
