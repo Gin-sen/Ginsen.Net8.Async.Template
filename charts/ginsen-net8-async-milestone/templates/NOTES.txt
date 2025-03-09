@@ -2,6 +2,7 @@
 {{- if .Values.istio.api.enabled }}
 {{- range $host := .Values.istio.api.hosts }}
   https://{{ $host }}
+  http://{{ $host }}
 {{- end }}
 {{- else if .Values.ingress.enabled }}
 {{- range $host := .Values.ingress.hosts }}
