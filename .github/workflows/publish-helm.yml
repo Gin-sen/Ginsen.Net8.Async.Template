@@ -13,6 +13,8 @@ on:
 jobs:
   helm:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       REGISTRY: ghcr.io
       REPOSITORY: gin-sen/ginsen-net8-async-milestone-charts
