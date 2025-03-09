@@ -4,6 +4,18 @@
   https://{{ $host }}
   http://{{ $host }}
 {{- end }}
+{{- if .Values.monitor.api.istio.enabled }}
+{{- range $host := .Values.monitor.api.istio.hosts }}
+  https://{{ $host }}
+  http://{{ $host }}
+{{- end }}
+{{- end }}
+{{- if .Values.monitor.worker.istio.enabled }}
+{{- range $host := .Values.monitor.worker.istio.hosts }}
+  https://{{ $host }}
+  http://{{ $host }}
+{{- end }}
+{{- end }}
 {{- else if .Values.ingress.enabled }}
 {{- range $host := .Values.ingress.hosts }}
   {{- range .paths }}
