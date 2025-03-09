@@ -19,17 +19,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Setup Helm
         uses: azure/setup-helm@v3
       - name: Helm lint
         run: helm lint charts/ginsen-net8-async-milestone
       - name: Helm template
         run: helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --debug
-      - name: Helm package
-        run: helm package ./charts/ginsen-net8-async-milestone -n test --debug
-
       - name: Helm Chart Releaser
         # You may pin to the exact commit or the version.
         # uses: helm/chart-releaser-action@cae68fefc6b5f367a0275617c9f83181ba54714f
         uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_TOKEN: "${{ secrets.TOKEN }}"
                 
