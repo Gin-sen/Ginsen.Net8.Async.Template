@@ -38,6 +38,18 @@ lancez cette commande à la racine du répertoire :
 dotnet new uninstall .
 ```
 
+## Déploiement Helm
+
+```bash
+helm repo add gin-sen https://gin-sen.github.io/Ginsen.Net8.Async.Template
+helm repo list
+helm repo update
+helm show all gin-sen/ginsen-net8-async-milestone
+kubectl create ns milestone
+kubectl label ns milestone istio-injection=enabled
+helm upgrade --install ginsen-net8-async-milestone gin-sen/ginsen-net8-async-milestone -n milestone
+```
+
 
 ## Notes
 
