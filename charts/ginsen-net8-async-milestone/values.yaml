@@ -30,7 +30,7 @@ fullnameOverride:
 
 env:
   api: []
-  worker: [] 
+  worker: []
   common:
     - name: TZ
       value: Europe/Paris
@@ -76,7 +76,6 @@ monitor:
         cpu: 250m
         memory: 256Mi
 
-
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
   api:
@@ -101,7 +100,7 @@ serviceAccount:
     name: ""
 
 # This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations:
   api:
   worker: {}
@@ -137,7 +136,7 @@ service:
     containerPort: 80
 
 istio:
-  api: 
+  api:
     enabled: true
     gateways: ["istio-ingress/istio-ingress-gateway"]
     hosts: ["test.mainframe.local"]
@@ -212,21 +211,21 @@ volumeMounts:
 
 # Dotnet Monitor volumes on the output Deployment definition.
 volumesMonitor:
-  api: 
+  api:
     - name: diagvol
       emptyDir: {}
-  worker: 
+  worker:
     - name: diagvol
       emptyDir: {}
 
 # Dotnet Monitor volumeMounts on the output Deployment definition.
 volumeMountsMonitor:
-  api: 
-  # if monitor.api.enabled is true then add the following volume mount
+  api:
+    # if monitor.api.enabled is true then add the following volume mount
     - mountPath: /diag
       name: diagvol
-  worker: 
-  # if monitor.worker.enabled is true then add the following volume mount
+  worker:
+    # if monitor.worker.enabled is true then add the following volume mount
     - mountPath: /diag
       name: diagvol
 
@@ -246,7 +245,8 @@ affinity:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
