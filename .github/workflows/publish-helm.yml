@@ -33,10 +33,11 @@ jobs:
         uses: azure/setup-helm@v3
         
       - name: Helm login
-        run: helm registry login ${{ env.REGISTRY }}/${{ env.USER }} -u ${{ env.USER }} -p ${{ secrets.TOKEN }}
+        run: echo "${{ secrets.TOKEN }}" | helm registry login ${{ env.REGISTRY }}/${{ env.USER }} -u ${{ env.USER }} --password-stdin
   
       - name: Helm lint
         run: helm lint charts/ginsen-net8-async-milestone
+
       - name: Helm template
         run: helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --debug
 
@@ -44,7 +45,7 @@ jobs:
         run: helm package ./charts/ginsen-net8-async-milestone -d ./charts
 
       - name: Helm push
-        run: helm push ./charts/*.tgz oci://${{ env.REGISTRY }}/${{ env.USER }}/${{ env.REPOSITORY }}
+        run: helm push ./charts/*.tgz oci://${{ env.REGISTRY }}/${{ env.USER }}
 
       # chart.gz (404) Not Found
       # - name: Helm Chart Releaser
