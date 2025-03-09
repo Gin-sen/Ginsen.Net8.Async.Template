@@ -1,19 +1,19 @@
 1. Get the application URL by running these commands:
 {{- if .Values.istio.api.enabled }}
 {{- range $host := .Values.istio.api.hosts }}
-  https://{{ $host }}/swagger
-  http://{{ $host }}/swagger
+  https://{{ $host }}/swagger/index.html
+  http://{{ $host }}/swagger/index.html
 {{- end }}
 {{- if .Values.monitor.api.istio.enabled }}
 {{- range $host := .Values.monitor.api.istio.hosts }}
-  https://{{ $host }}/swagger
-  http://{{ $host }}/swagger
+  https://{{ $host }}/swagger/index.html
+  http://{{ $host }}/swagger/index.html
 {{- end }}
 {{- end }}
 {{- if .Values.monitor.worker.istio.enabled }}
 {{- range $host := .Values.monitor.worker.istio.hosts }}
-  https://{{ $host }}/swagger
-  http://{{ $host }}/swagger
+  https://{{ $host }}/swagger/index.html
+  http://{{ $host }}/swagger/index.html
 {{- end }}
 {{- end }}
 {{- else if .Values.ingress.enabled }}
