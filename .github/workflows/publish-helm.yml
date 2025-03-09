@@ -1,0 +1,30 @@
+name: ci-charts
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+    - 'charts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'charts/**'
+
+jobs:
+  helm:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+      DOCKER_IMAGE: gin-sen/ginsen-net8-async-milestone
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: 'v3.16.3'
+      - name: Helm lint
+        run: helm lint charts/ginsen-net8-async-milestone
+      - name: Helm template
+        run: helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --debug
+        
