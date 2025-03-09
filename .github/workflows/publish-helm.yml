@@ -41,11 +41,11 @@ jobs:
           helm lint charts/ginsen-net8-async-milestone
           helm template ginsen-net8-async-milestone ./charts/ginsen-net8-async-milestone -n test --debug
 
-      - name: Helm package
-        run: helm package ./charts/ginsen-net8-async-milestone -d ./charts
-
-      - name: Helm push
-        run: helm push ./charts/*.tgz oci://${{ env.REGISTRY }}/${{ env.USER }}
+      - name: Helm package and push
+        run: |
+          helm package ./charts/ginsen-net8-async-milestone -d ./charts
+          helm push ./charts/*.tgz oci://${{ env.REGISTRY }}/${{ env.USER }}
+          rm -rf ./charts/*.tgz
 
       # chart.gz (404) Not Found
       - name: Helm Chart Releaser
