@@ -26,16 +26,6 @@ jobs:
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      - name: Create helm-charts branch if it doesn't exist
-        continue-on-error: true
-        run: |
-          git checkout -b helm-charts || exit 1
-          git rebase main
-          git push origin helm-charts
-      
-          git checkout main
-
       - name: Setup Helm
         uses: azure/setup-helm@v3
       - name: Helm lint
