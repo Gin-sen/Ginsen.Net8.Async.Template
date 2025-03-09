@@ -1,5 +1,8 @@
 apiVersion: v2
 name: ginsen-net8-async-milestone
+maintainers:
+  - name: Gin-Sen
+    email: gin-sen@users.noreply.github.com
 description: Dotnet specific chart with dotnet-monitor sidecar on Api and Worker
 type: application
 
