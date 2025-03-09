@@ -21,6 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
@@ -48,5 +49,5 @@ jobs:
         with:
           pages_branch: helm-charts
         env:
-          CR_TOKEN: "${{ secrets.TOKEN }}"
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
                 
