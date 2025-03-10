@@ -37,6 +37,43 @@ env:
     - name: ASPNETCORE_ENVIRONMENT
       value: Docker
 
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  api:
+    # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+    type: ClusterIP
+    # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+    port: 80
+    containerPort: 5000
+
+istio:
+  api:
+    enabled: true
+    gateways: ["istio-ingress/istio-ingress-gateway"]
+    hosts: ["test.mainframe.local"]
+    prefix: "/"
+  worker: {}
+
+resources:
+  api:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  worker:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
 # This is for seting up the dotnet-monitor sidecar
 monitor:
   api:
@@ -128,54 +165,17 @@ securityContext:
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
-service:
-  api:
-    # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
-    type: ClusterIP
-    # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-    port: 80
-    containerPort: 80
-
-istio:
-  api:
-    enabled: true
-    gateways: ["istio-ingress/istio-ingress-gateway"]
-    hosts: ["test.mainframe.local"]
-    prefix: "/"
-  worker: {}
-
-resources:
-  api:
-    limits:
-      cpu: 250m
-      memory: 512Mi
-  worker:
-    limits:
-      cpu: 250m
-      memory: 512Mi
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   api:
     httpGet:
-      path: /
+      path: /health
       port: http
   worker: {}
 readinessProbe:
   api:
     httpGet:
-      path: /
+      path: /health
       port: http
   worker: {}
 
