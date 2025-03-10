@@ -57,13 +57,13 @@ spec:
           imagePullPolicy: Always
           env:
             - name: DOTNETMONITOR_DiagnosticPort__ConnectionMode
-              value: Listen
+              value: "Listen"
             - name: DOTNETMONITOR_Storage__DefaultSharedPath
-              value: /diag
+              value: "/diag"
             - name: DOTNETMONITOR_Urls
-              value: http://localhost:52323
+              value: "http://localhost:52323"
             - name: DOTNETMONITOR_Metrics__Endpoints
-              value: http://+:52325
+              value: "http://+:52325"
           {{- with .Values.volumeMountsMonitor.worker }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
@@ -79,15 +79,15 @@ spec:
           env:
             {{- range .Values.env.common }}
             - name: {{- .name }}
-              value: {{- .value }}
+              value: {{- .value | quote }}
             {{- end }}
             {{- range .Values.env.worker }}
             - name: {{- .name }}
-              value: {{- .value }}
+              value: {{- .value | quote }}
             {{- end }}
             {{- if .Values.monitor.worker.enabled }}
             - name: DOTNET_DiagnosticPorts
-              value: /diag/dotnet-monitor.sock
+              value: "/diag/dotnet-monitor.sock"
             {{- end }}
           resources:
             {{- toYaml .Values.resources.worker | nindent 12 }}
