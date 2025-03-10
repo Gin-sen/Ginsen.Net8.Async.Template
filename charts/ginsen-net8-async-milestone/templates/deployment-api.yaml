@@ -84,12 +84,12 @@ spec:
               protocol: TCP
           env:
             {{- range .Values.env.common }}
-            - name: {{- .name }}
-              value: {{- .value | quote }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
             {{- end }}
             {{- range .Values.env.api }}
-            - name: {{- .name }}
-              value: {{- .value | quote }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
             {{- end }}
             {{- if .Values.monitor.api.enabled }}
             - name: DOTNET_DiagnosticPorts

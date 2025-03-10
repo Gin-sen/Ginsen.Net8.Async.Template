@@ -78,12 +78,12 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- range .Values.env.common }}
-            - name: {{- .name }}
-              value: {{- .value | quote }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
             {{- end }}
             {{- range .Values.env.worker }}
-            - name: {{- .name }}
-              value: {{- .value | quote }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
             {{- end }}
             {{- if .Values.monitor.worker.enabled }}
             - name: DOTNET_DiagnosticPorts
