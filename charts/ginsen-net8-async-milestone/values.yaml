@@ -170,13 +170,13 @@ livenessProbe:
   api:
     httpGet:
       path: /health
-      port: http
+      port: 5000
   worker: {}
 readinessProbe:
   api:
     httpGet:
       path: /health
-      port: http
+      port: 5000
   worker: {}
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
