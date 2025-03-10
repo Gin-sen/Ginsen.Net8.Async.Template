@@ -34,6 +34,8 @@ env:
   common:
     - name: TZ
       value: Europe/Paris
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Docker
 
 # This is for seting up the dotnet-monitor sidecar
 monitor:

@@ -56,6 +56,8 @@ spec:
           args: [ "collect", "--no-auth" ]
           imagePullPolicy: Always
           env:
+            - name: TZ
+              value: "Europe/Paris"
             - name: DOTNETMONITOR_DiagnosticPort__ConnectionMode
               value: "Listen"
             - name: DOTNETMONITOR_Storage__DefaultSharedPath
