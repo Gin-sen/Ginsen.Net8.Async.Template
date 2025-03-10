@@ -21,6 +21,7 @@ image:
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
+
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride:
@@ -29,10 +30,49 @@ fullnameOverride:
 
 env:
   api: []
-  worker: [] 
+  worker: []
   common:
     - name: TZ
       value: Europe/Paris
+    - name: ASPNETCORE_ENVIRONMENT
+      value: Docker
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  api:
+    # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+    type: ClusterIP
+    # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+    port: 80
+    containerPort: 8080
+
+istio:
+  api:
+    enabled: true
+    gateways: ["istio-ingress/istio-ingress-gateway"]
+    hosts: ["test.mainframe.local"]
+    prefix: "/"
+  worker: {}
+
+resources:
+  api:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  worker:
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 # This is for seting up the dotnet-monitor sidecar
 monitor:
@@ -75,7 +115,6 @@ monitor:
         cpu: 250m
         memory: 256Mi
 
-
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
   api:
@@ -100,7 +139,7 @@ serviceAccount:
     name: ""
 
 # This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations:
   api:
   worker: {}
@@ -126,55 +165,18 @@ securityContext:
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
-service:
-  api:
-    # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
-    type: ClusterIP
-    # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-    port: 80
-    containerPort: 80
-
-istio:
-  api: 
-    enabled: true
-    gateways: ["istio-ingress/istio-ingress-gateway"]
-    hosts: ["test.mainframe.local"]
-    prefix: "/"
-  worker: {}
-
-resources:
-  api:
-    limits:
-      cpu: 250m
-      memory: 512Mi
-  worker:
-    limits:
-      cpu: 250m
-      memory: 512Mi
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   api:
     httpGet:
-      path: /
-      port: http
+      path: /health
+      port: 8080
   worker: {}
 readinessProbe:
   api:
     httpGet:
-      path: /
-      port: http
+      path: /health
+      port: 8080
   worker: {}
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
@@ -211,21 +213,21 @@ volumeMounts:
 
 # Dotnet Monitor volumes on the output Deployment definition.
 volumesMonitor:
-  api: 
+  api:
     - name: diagvol
       emptyDir: {}
-  worker: 
+  worker:
     - name: diagvol
       emptyDir: {}
 
 # Dotnet Monitor volumeMounts on the output Deployment definition.
 volumeMountsMonitor:
-  api: 
-  # if monitor.api.enabled is true then add the following volume mount
+  api:
+    # if monitor.api.enabled is true then add the following volume mount
     - mountPath: /diag
       name: diagvol
-  worker: 
-  # if monitor.worker.enabled is true then add the following volume mount
+  worker:
+    # if monitor.worker.enabled is true then add the following volume mount
     - mountPath: /diag
       name: diagvol
 
@@ -245,7 +247,8 @@ affinity:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:

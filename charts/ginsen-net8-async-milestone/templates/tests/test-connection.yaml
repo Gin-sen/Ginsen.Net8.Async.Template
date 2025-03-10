@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "ginsen-net8-async-milestone.fullname-api" . }}:{{ .Values.service.api.port }}']
+      args: ['http://{{ include "ginsen-net8-async-milestone.fullname-api" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.api.port }}/health']
   restartPolicy: Never
