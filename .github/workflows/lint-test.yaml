@@ -50,7 +50,7 @@ jobs:
           helm repo add istio https://istio-release.storage.googleapis.com/charts
           helm repo update
           helm install istio-base istio/base -n istio-system --set defaultRevision=default --create-namespace
-          helm install istiod istio/istiod -n istio-system --wait
+          # helm install istiod istio/istiod -n istio-system --wait
           kubectl create namespace test
           kubectl label namespace test istio-injection=enabled
           kubectl create secret docker-registry gh-regcred --namespace test --docker-server=https://${{ env.REGISTRY }} --docker-username=${{ env.USER }} --docker-password=${{ secrets.TOKEN }} --docker-email="${{ env.USER }}@users.noreply.github.com"
