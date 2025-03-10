@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  ginsen-net8-async-milestone:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-03-10T20:48:59.478776354Z"
+    description: Dotnet specific chart with dotnet-monitor sidecar on Api and Worker
+    digest: 99f182ab62a2134d0c6932d4da83d05890b0b8d3ecdf15e1d4bd826e65c83c8b
+    maintainers:
+    - email: gin-sen@users.noreply.github.com
+      name: Gin-Sen
+    name: ginsen-net8-async-milestone
+    type: application
+    urls:
+    - https://github.com/Gin-sen/Ginsen.Net8.Async.Template/releases/download/ginsen-net8-async-milestone-0.1.5/ginsen-net8-async-milestone-0.1.5.tgz
+    version: 0.1.5
+generated: "2025-03-10T20:48:59.478782105Z"
