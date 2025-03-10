@@ -56,16 +56,16 @@ spec:
           args: [ "collect", "--no-auth" ]
           imagePullPolicy: Always
           env:
-          - name: DOTNETMONITOR_DiagnosticPort__ConnectionMode
-            value: Listen
-          - name: DOTNETMONITOR_Storage__DefaultSharedPath
-            value: /diag
-          - name: DOTNETMONITOR_Storage__DumpTempFolder
-            value: /tmp
-          - name: DOTNETMONITOR_Urls
-            value: http://localhost:52323
-          - name: DOTNETMONITOR_Metrics__Endpoints
-            value: http://+:52325
+            - name: DOTNETMONITOR_DiagnosticPort__ConnectionMode
+              value: Listen
+            - name: DOTNETMONITOR_Storage__DefaultSharedPath
+              value: /diag
+            - name: DOTNETMONITOR_Storage__DumpTempFolder
+              value: /tmp
+            - name: DOTNETMONITOR_Urls
+              value: http://localhost:52323
+            - name: DOTNETMONITOR_Metrics__Endpoints
+              value: http://+:52325
           {{- with .Values.volumeMountsMonitor.api }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
