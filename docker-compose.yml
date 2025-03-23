@@ -36,6 +36,11 @@ services:
     networks:
       - backend-net
 
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    networks:
+      - backend-net
+
 networks:
   backend-net:
     driver: bridge

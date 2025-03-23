@@ -13,23 +13,33 @@ services:
     #   - "8081:8080"
 
   rabbit:
+    labels:
+      NAME: "rabbit"
     hostname: 'rabbit'
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_DEFAULT_VHOST=my_vhost
     volumes:
       - rabbit-data:/var/lib/rabbitmq/mnesia/
+      - ./compose/rabbit/conf/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+      # - ./compose/rabbit/conf/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      # - ./compose/rabbit/definitions.d/:/etc/rabbitmq/definitions.d/:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5672"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 15s
+      retries: 5
 
   postgres:
     environment:
-      - POSTGRES_DB=postgres
+      - PGUSER=postgres
+      - POSTGRES_DB=mypostgresdb
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgress
+      - POSTGRES_PASSWORD=password
     ports:
       - "5433:5432"
     volumes:
@@ -40,6 +50,16 @@ services:
       timeout: 5s
       retries: 5
 
+  azurite:
+    hostname: azurite
+    restart: always
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - azurite-data:/workspace
 volumes:
   rabbit-data: {}
   postgres-data: {}
+  azurite-data: {}
