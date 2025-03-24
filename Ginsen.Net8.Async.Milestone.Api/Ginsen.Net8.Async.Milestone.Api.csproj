@@ -13,6 +13,8 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Azure.Data.Tables" Version="12.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.11.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
     <PackageReference Include="Serilog" Version="4.2.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
@@ -21,8 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Contracts.Http/Ginsen.Net8.Async.Milestone.Contracts.Http.csproj" />
+    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Api.Contracts/Ginsen.Net8.Async.Milestone.Api.Contracts.csproj" />
     <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Contracts.Messaging/Ginsen.Net8.Async.Milestone.Contracts.Messaging.csproj" />
+    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount/Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount.csproj" />
   </ItemGroup>
 
   <ItemGroup>

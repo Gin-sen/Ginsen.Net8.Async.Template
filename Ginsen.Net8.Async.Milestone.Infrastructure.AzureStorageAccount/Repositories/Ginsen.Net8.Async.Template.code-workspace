@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"debug.terminal.clearBeforeReusing": true,
+		"dotnet.defaultSolution": "Ginsen.Net8.Async.sln"
+	}
+}

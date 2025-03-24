@@ -11,8 +11,9 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS restore
 WORKDIR /src
 COPY ["Ginsen.Net8.Async.Milestone.Api/Ginsen.Net8.Async.Milestone.Api.csproj", "Ginsen.Net8.Async.Milestone.Api/"]
-COPY ["Ginsen.Net8.Async.Milestone.Contracts.Http/Ginsen.Net8.Async.Milestone.Contracts.Http.csproj", "Ginsen.Net8.Async.Milestone.Contracts.Http/"]
+COPY ["Ginsen.Net8.Async.Milestone.Api.Contracts/Ginsen.Net8.Async.Milestone.Api.Contracts.csproj", "Ginsen.Net8.Async.Milestone.Api.Contracts/"]
 COPY ["Ginsen.Net8.Async.Milestone.Contracts.Messaging/Ginsen.Net8.Async.Milestone.Contracts.Messaging.csproj", "Ginsen.Net8.Async.Milestone.Contracts.Messaging/"]
+COPY ["Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount/Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount.csproj", "Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount/"]
 COPY ["Ginsen.Net8.Async.Milestone.Infrastructure/Ginsen.Net8.Async.Milestone.Infrastructure.csproj", "Ginsen.Net8.Async.Milestone.Infrastructure/"]
 COPY ["Ginsen.Net8.Async.Milestone.Worker/Ginsen.Net8.Async.Milestone.Worker.csproj", "Ginsen.Net8.Async.Milestone.Worker/"]
 RUN dotnet restore "./Ginsen.Net8.Async.Milestone.Api/Ginsen.Net8.Async.Milestone.Api.csproj" && \

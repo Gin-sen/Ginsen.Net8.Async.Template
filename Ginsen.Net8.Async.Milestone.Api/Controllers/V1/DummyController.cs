@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ginsen.Net8.Async.Milestone.Contracts.Http.V1.Dummies;
+using Ginsen.Net8.Async.Milestone.Api.Contracts.V1.Dummies;
 using Asp.Versioning;
 
 namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
@@ -30,15 +30,14 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
     [HttpGet("GetOk")]
     [Produces( "application/json" )]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetDummy))]
-    public async Task<IActionResult> GetOkAsync(
+    public IActionResult GetOkAsync(
       CancellationToken cancellationToken)
     {
       if (_logger.IsEnabled(LogLevel.Information))
       {
         _logger.LogInformation("Ok");
       }
-      await Task.Delay(1_000, cancellationToken);
-      return Ok(new GetDummy());
+      return Ok(new GetDummy(Guid.NewGuid(), Guid.NewGuid(), "Dummy"));
     }
   }
 }
