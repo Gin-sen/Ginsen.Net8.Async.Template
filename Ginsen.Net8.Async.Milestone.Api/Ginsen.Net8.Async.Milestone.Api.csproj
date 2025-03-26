@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Api.Contracts/Ginsen.Net8.Async.Milestone.Api.Contracts.csproj" />
+    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Application/Ginsen.Net8.Async.Milestone.Application.csproj" />
     <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Contracts.Messaging/Ginsen.Net8.Async.Milestone.Contracts.Messaging.csproj" />
     <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount/Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount.csproj" />
   </ItemGroup>

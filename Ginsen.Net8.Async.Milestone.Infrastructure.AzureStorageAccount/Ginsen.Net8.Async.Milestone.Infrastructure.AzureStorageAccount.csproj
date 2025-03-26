@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Application/Ginsen.Net8.Async.Milestone.Application.csproj" />
     <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Domain/Ginsen.Net8.Async.Milestone.Domain.csproj" />
   </ItemGroup>
 

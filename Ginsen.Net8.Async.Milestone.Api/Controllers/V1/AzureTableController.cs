@@ -14,15 +14,15 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
   public class AzureTableController : ControllerBase
   {
     private readonly ILogger<AzureTableController> _logger;
-    private readonly IDummiesRepository _dummiesRepository;
+    private readonly IDummiesService _dummiesService;
 
     /// <summary>
     /// Controller for handling dummy operations.
     /// </summary>
-    public AzureTableController(ILogger<AzureTableController> logger, IDummiesRepository dummiesRepository)
+    public AzureTableController(ILogger<AzureTableController> logger, IDummiesService dummiesService)
     {
       _logger = logger;
-      _dummiesRepository = dummiesRepository;
+      _dummiesService = dummiesService;
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ namespace Ginsen.Net8.Async.Milestone.Api.Controllers.V1
       {
         _logger.LogInformation("Getting entity {PartitionKey}/{RowKey}", partitionKey, rowKey);
       }
-      var result = await _dummiesRepository.GetAsync(partitionKey.ToString(), rowKey.ToString(), cancellationToken);
+      var result = await _dummiesService.GetAsync(partitionKey.ToString(), rowKey.ToString(), cancellationToken);
       if (result == null)
         return NotFound();
       return Ok(new GetDummy(result.PartitionKey, result.RowKey, result.Message));

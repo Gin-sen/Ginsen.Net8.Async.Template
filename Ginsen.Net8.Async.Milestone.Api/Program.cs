@@ -56,7 +56,8 @@ builder.Services.AddAzureClients(clientsBuilder =>
 });
 
 // Add services
-builder.Services.TryAddSingleton<IDummiesRepository, DummiesRepository>();
+builder.Services.TryAddSingleton<IDummiesService, DummiesService>();
+builder.Services.TryAddSingleton<INewDummiesRepository, NewDummiesRepository>();
 
 
 var app = builder.Build();
