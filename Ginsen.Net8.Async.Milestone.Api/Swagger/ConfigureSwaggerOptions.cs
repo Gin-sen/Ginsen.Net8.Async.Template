@@ -37,7 +37,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         var baseName = assemblyName?.Substring(0, assemblyName.Length - ".Api".Length) ?? "Ginsen.Net8.Async.Milestone";
 
         foreach (var subName in new[]{
-                ".Contracts.Http",
+                ".Api.Contracts",
                 // ".Contracts.Messaging"
                 })
         {
