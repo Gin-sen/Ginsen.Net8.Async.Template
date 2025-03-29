@@ -8,6 +8,9 @@ using Microsoft.Extensions.Azure;
 using Azure.Data.Tables;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Ginsen.Net8.Async.Milestone.Application.Repositories;
+using Ginsen.Net8.Async.Milestone.Api.Endpoints.V1;
+using Asp.Versioning.Builder;
+using Asp.Versioning;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configure logging
@@ -21,7 +24,7 @@ builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSectio
 // Add HealthChecks
 builder.Services.AddHealthChecks();
 // Add controllers
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
 // Add ProblemDetails (https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#problem-details-service)
 builder.Services.AddProblemDetails();
 // Add API versioning for openapi generation
@@ -47,6 +50,7 @@ builder.Services.AddApiVersioning(
 if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName.Equals("Docker"))
 {
   builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+  builder.Services.AddEndpointsApiExplorer();
   builder.Services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
 }
 // Add Azure Table Service
@@ -57,8 +61,9 @@ builder.Services.AddAzureClients(clientsBuilder =>
 
 // Add services
 builder.Services.TryAddSingleton<IDummiesService, DummiesService>();
-builder.Services.TryAddSingleton<INewDummiesRepository, NewDummiesRepository>();
+builder.Services.TryAddSingleton<IDummiesRepository, DummiesRepository>();
 
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -89,8 +94,15 @@ if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName.Equals("D
 app.UseAuthorization();
 // Add HealthChecks to route /health
 app.UseHealthChecks("/health");
-// Map Controllers
-app.MapControllers();
+// Map Endpoints
+// app.MapControllers();
+ApiVersionSet apiVersionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1))
+    // .HasApiVersion(new ApiVersion(2))
+    .ReportApiVersions()
+    .Build();
+AzureTableEndpoints.MapAzureTableEndpoints(app, apiVersionSet);
+MathEndpoints.MapMathEndpoints(app, apiVersionSet);
 
 ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
 

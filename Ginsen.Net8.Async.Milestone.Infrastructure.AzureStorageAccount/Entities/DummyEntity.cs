@@ -32,8 +32,9 @@ namespace Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount.Entitie
     /// <summary>
     /// Gets or sets the message.
     /// </summary>
-    public string? Message { get; set; }
+    public string Message { get; set; } = string.Empty;
 
+    public DummyEntity() { PartitionKey = Guid.Empty.ToString(); RowKey = Guid.Empty.ToString(); Message = string.Empty; }
 
     public DummyEntity(Dummy dummy)
     {

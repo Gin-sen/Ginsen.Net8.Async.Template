@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "http", "http", "{F3B71EF2-8
 		http\Ginsen.Net8.Async.Milestone.Api.http = http\Ginsen.Net8.Async.Milestone.Api.http
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginsen.Net8.Async.Milestone.Infrastructure", "Ginsen.Net8.Async.Milestone.Infrastructure\Ginsen.Net8.Async.Milestone.Infrastructure.csproj", "{49123587-D192-4D62-9D16-FD6E5F20B9A9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginsen.Net8.Async.Milestone.Contracts.Messaging", "Ginsen.Net8.Async.Milestone.Contracts.Messaging\Ginsen.Net8.Async.Milestone.Contracts.Messaging.csproj", "{11C32B1E-C25C-4962-96D9-DA275AA53ABD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ginsen.Net8.Async.Milestone.Api.Contracts", "Ginsen.Net8.Async.Milestone.Api.Contracts\Ginsen.Net8.Async.Milestone.Api.Contracts.csproj", "{70DE94D2-628A-4036-894F-30FEB3E5A36E}"
@@ -58,14 +56,6 @@ Global
 		{70026D66-8091-4D20-A116-4CB3E6C0243D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70026D66-8091-4D20-A116-4CB3E6C0243D}.Release|x64.ActiveCfg = Release|Any CPU
 		{70026D66-8091-4D20-A116-4CB3E6C0243D}.Release|x64.Build.0 = Release|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Debug|x64.Build.0 = Debug|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|x64.ActiveCfg = Release|Any CPU
-		{49123587-D192-4D62-9D16-FD6E5F20B9A9}.Release|x64.Build.0 = Release|Any CPU
 		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11C32B1E-C25C-4962-96D9-DA275AA53ABD}.Debug|x64.ActiveCfg = Debug|Any CPU

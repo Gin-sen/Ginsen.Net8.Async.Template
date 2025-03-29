@@ -19,23 +19,24 @@ public class Dummy
     /// <summary>
     /// Gets or sets the message.
     /// </summary>
-    public string? Message { get; set; }
+    public string Message { get; set; } = string.Empty;
 
     public Dummy()
     {
       PartitionKey = Guid.NewGuid();
       RowKey = Guid.NewGuid();
+      Message = string.Empty;
     }
     public Dummy(string? message)
     {
       PartitionKey = Guid.NewGuid();
       RowKey = Guid.NewGuid();
-      Message = message;
+      Message = message ?? string.Empty;
     }
     public Dummy(string partitionKey, string rowKey, string? message)
     {
       PartitionKey = Guid.Parse(partitionKey);
       RowKey = Guid.Parse(rowKey);
-      Message = message;
+      Message = message ?? string.Empty;
     }
 }
