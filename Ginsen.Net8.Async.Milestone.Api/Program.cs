@@ -1,95 +1,136 @@
 using Ginsen.Net8.Async.Milestone.Api.Swagger;
+using Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount.Repositories;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Extensions.Azure;
+using Azure.Data.Tables;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Ginsen.Net8.Async.Milestone.Application.Repositories;
+using Ginsen.Net8.Async.Milestone.Api.Endpoints.V1;
+using Asp.Versioning.Builder;
+using Asp.Versioning;
+
+var builder = WebApplication.CreateBuilder(args);
+// Configure logging
+builder.Services.AddSerilog((services, lc) =>
+{
+  lc.ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext();
+});
+// Remove default header (security issue)
+builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
+// Add HealthChecks
+builder.Services.AddHealthChecks();
+// Add controllers
+// builder.Services.AddControllers();
+// Add ProblemDetails (https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#problem-details-service)
+builder.Services.AddProblemDetails();
+// Add API versioning for openapi generation
+builder.Services.AddApiVersioning(
+    options =>
+    {
+      // reporting api versions will return the headers
+      // "api-supported-versions" and "api-deprecated-versions"
+      options.ReportApiVersions = true;
+    } )
+  .AddApiExplorer(
+    options =>
+    {
+      // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+      // note: the specified format code will format the version as "'v'major[.minor][-status]"
+      options.GroupNameFormat = "'v'VVV";
+
+      // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+      // can also be used to control the format of the API version in route templates
+      options.SubstituteApiVersionInUrl = true;
+    } );
+// Add Swagger Gen only in development
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName.Equals("Docker"))
+{
+  builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+  builder.Services.AddEndpointsApiExplorer();
+  builder.Services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
+}
+// Add Azure Table Service
+builder.Services.AddAzureClients(clientsBuilder =>
+{
+  clientsBuilder.AddTableServiceClient(builder.Configuration.GetConnectionString("StorageAccount"));
+});
+
+// Add services
+builder.Services.TryAddSingleton<IDummiesService, DummiesService>();
+builder.Services.TryAddSingleton<IDummiesRepository, DummiesRepository>();
+
+builder.Services.AddAuthorization();
+
+var app = builder.Build();
+
+// Add ProblemDetails (https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#problem-details-service)
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+// Add DeveloperExceptionPage Swagger UI only in development
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName.Equals("Docker"))
+{
+  app.UseDeveloperExceptionPage();
+  app.UseSwagger();
+  app.UseSwaggerUI(
+      options =>
+      {
+          var descriptions = app.DescribeApiVersions();
+      
+          // build a swagger endpoint for each discovered API version
+          foreach ( var description in descriptions )
+          {
+              var url = $"/swagger/{description.GroupName}/swagger.json";
+              var name = description.GroupName.ToUpperInvariant();
+              options.SwaggerEndpoint( url, name );
+          }
+      } );
+}
+// Add Authorization
+app.UseAuthorization();
+// Add HealthChecks to route /health
+app.UseHealthChecks("/health");
+// Map Endpoints
+// app.MapControllers();
+ApiVersionSet apiVersionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1))
+    // .HasApiVersion(new ApiVersion(2))
+    .ReportApiVersions()
+    .Build();
+AzureTableEndpoints.MapAzureTableEndpoints(app, apiVersionSet);
+MathEndpoints.MapMathEndpoints(app, apiVersionSet);
+
+ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
+
+if (logger.IsEnabled(LogLevel.Information))
+  logger.LogInformation("Initialisation");
+
+TableServiceClient tableServiceClient = app.Services.GetRequiredService<TableServiceClient>();
+
+if (logger.IsEnabled(LogLevel.Information))
+  logger.LogInformation("Creating table Dummies if not exists");
 
 try
 {
-  var builder = WebApplication.CreateBuilder(args);
-  
-  builder.Services.AddSerilog((services, lc) =>
-  {
-    lc.ReadFrom.Configuration(builder.Configuration)
-      .Enrich.FromLogContext();
-  });
-  builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
-  builder.Services.AddHealthChecks();
-  builder.Services.AddControllers();
-  builder.Services.AddProblemDetails();
-  // builder.Services.AddEndpointsApiExplorer();
-  builder.Services.AddApiVersioning(
-            options =>
-            {
-                // reporting api versions will return the headers
-                // "api-supported-versions" and "api-deprecated-versions"
-                options.ReportApiVersions = true;
-            } )
-        .AddApiExplorer(
-            options =>
-            {
-                // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-                // note: the specified format code will format the version as "'v'major[.minor][-status]"
-                options.GroupNameFormat = "'v'VVV";
-
-                // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-                // can also be used to control the format of the API version in route templates
-                options.SubstituteApiVersionInUrl = true;
-            } )
-        // this enables binding ApiVersion as a endpoint callback parameter. if you don't use it, then
-        // you should remove this configuration.
-        .EnableApiVersionBinding();
-
-  if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName.Equals("Docker"))
-  {
-    builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-    builder.Services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
-  }
-  var app = builder.Build();
-
-  app.UseExceptionHandler();
-  app.UseStatusCodePages();
-
-  if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName.Equals("Docker"))
-  {
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(
-       options =>
-       {
-           var descriptions = app.DescribeApiVersions();
-       
-           // build a swagger endpoint for each discovered API version
-           foreach ( var description in descriptions )
-           {
-               var url = $"/swagger/{description.GroupName}/swagger.json";
-               var name = description.GroupName.ToUpperInvariant();
-               options.SwaggerEndpoint( url, name );
-           }
-       } );
-  }
-
-  app.UseAuthorization();
-
-  app.UseHealthChecks("/health");
-  app.MapControllers();
-
-  ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
-
-  if (logger.IsEnabled(LogLevel.Information))
-    logger.LogInformation("Initialisation");
-
-  if (logger.IsEnabled(LogLevel.Information))
-    logger.LogInformation("Starting web application");
-
-  await app.RunAsync();
+  await tableServiceClient.CreateTableIfNotExistsAsync("Dummies");
 }
 catch (Exception ex)
 {
-  if (Log.IsEnabled(Serilog.Events.LogEventLevel.Fatal))
-    Log.Fatal(ex, "Application terminated unexpectedly");
+  if (logger.IsEnabled(LogLevel.Critical))
+    logger.LogCritical(ex, "Error creating table Dummies");
+  return 1;
 }
-finally
-{
-  Log.CloseAndFlush();
-}
+
+if (logger.IsEnabled(LogLevel.Information))
+  logger.LogInformation("Starting web application");
+
+await app.RunAsync();
+
+if (logger.IsEnabled(LogLevel.Information))
+  logger.LogInformation("Application shutdown gracefully");
+
+return 0;

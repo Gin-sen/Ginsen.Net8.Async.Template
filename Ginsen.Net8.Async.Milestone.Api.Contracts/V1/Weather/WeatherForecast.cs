@@ -1,4 +1,4 @@
-namespace Ginsen.Net8.Async.Milestone.Contracts.Http.V1.Weather
+namespace Ginsen.Net8.Async.Milestone.Api.Contracts.V1.Weather
 {
   /// <summary>
   /// Represents a weather forecast for a specific date.

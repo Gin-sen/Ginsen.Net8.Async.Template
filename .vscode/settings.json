@@ -1,4 +1,5 @@
 {
   "editor.tabSize": 2,
-  "debug.terminal.clearBeforeReusing": true
+  "debug.terminal.clearBeforeReusing": true,
+  "dotnet.defaultSolution": "Ginsen.Net8.Async.sln"
 }
