@@ -14,25 +14,30 @@ using Asp.Versioning;
 using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Configure logging
 var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
 var logBuilder = new LoggerConfiguration()
- .Enrich.FromLogContext()
- .WriteTo.Console();
+  .Enrich.WithThreadId()
+  .Enrich.WithThreadName()
+  .Enrich.WithMachineName()
+  .Enrich.WithEnvironmentName()
+  .Enrich.FromLogContext()
+  .WriteTo.Console();
 
 if (useOtlpExporter)
 {
-    logBuilder
-       .WriteTo.OpenTelemetry(options =>
-     {
-         options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-         options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
-     });
+  logBuilder
+      .WriteTo.OpenTelemetry(options =>
+    {
+      options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+      options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+    });
 }
 
-Log.Logger = logBuilder.CreateBootstrapLogger();
+Log.Logger = logBuilder.CreateLogger();
+builder.Services.AddSerilog();
 
-builder.Logging.AddSerilog(Log.Logger, dispose: true);
 // Remove default header (security issue)
 builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 // Add HealthChecks
@@ -118,15 +123,13 @@ ApiVersionSet apiVersionSet = app.NewApiVersionSet()
 AzureTableEndpoints.MapAzureTableEndpoints(app, apiVersionSet);
 MathEndpoints.MapMathEndpoints(app, apiVersionSet);
 
-ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
-
-if (Log.Logger.IsEnabled(LogEventLevel.Information))
-  Log.Logger.Information("Initialisation");
+if (Log.IsEnabled(LogEventLevel.Information))
+  Log.Information("Initialisation");
 
 TableServiceClient tableServiceClient = app.Services.GetRequiredService<TableServiceClient>();
 
-if (Log.Logger.IsEnabled(LogEventLevel.Information))
-  Log.Logger.Information("Creating table Dummies if not exists");
+if (Log.IsEnabled(LogEventLevel.Information))
+  Log.Information("Creating table Dummies if not exists");
 
 try
 {
@@ -134,12 +137,14 @@ try
 }
 catch (Exception ex)
 {
-  if (Log.Logger.IsEnabled(LogEventLevel.Fatal))
-    Log.Logger.Fatal(ex, "Error creating table Dummies");
+  if (Log.IsEnabled(LogEventLevel.Fatal))
+    Log.Fatal(ex, "Error creating table Dummies");
   throw;
 }
 
-if (Log.Logger.IsEnabled(LogEventLevel.Information))
-  Log.Logger.Information("Starting web application");
+if (Log.IsEnabled(LogEventLevel.Information))
+  Log.Information("Starting web application");
 
 await app.RunAsync();
+
+Log.Information("Stopped cleanly");

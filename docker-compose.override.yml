@@ -6,7 +6,7 @@ services:
       - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
       # OpenTelemetry environmental variables:
       - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.api
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Api
       - OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Api
       # enable OpenTelemetry .NET Automatic Instrumentation
@@ -37,7 +37,7 @@ services:
       - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
       # OpenTelemetry environmental variables:
       - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.worker
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Worker
       - OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Worker
       # enable OpenTelemetry .NET Automatic Instrumentation
@@ -68,7 +68,7 @@ services:
       - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
       # OpenTelemetry environmental variables:
       - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.backoffice
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.BlazorBackOffice
       - OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.BlazorBackOffice
       # enable OpenTelemetry .NET Automatic Instrumentation
