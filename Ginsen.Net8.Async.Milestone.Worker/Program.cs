@@ -38,6 +38,7 @@ builder.Services.AddSerilog();
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
+await Task.Delay(100);
 await host.RunAsync();
 
 Log.Information("Stopped cleanly");

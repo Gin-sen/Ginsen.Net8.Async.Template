@@ -31,14 +31,30 @@ namespace Ginsen.Net8.Async.Milestone.Api.Endpoints.V1
     {
       group.MapGet("/{Numerator}/{Denominator}",
         (
+          [FromServices] ILogger<Program> logger,
           [FromRoute] double Numerator,
           [FromRoute] double Denominator,
           CancellationToken cancellationToken) => {
+            // Yes, it's required to use a dictionary. See https://nblumhardt.com/2016/11/ilogger-beginscope/
+            using (logger.BeginScope(new Dictionary<string, object>
+            {
+                ["Denominator"] = Denominator,
+                ["OperationType"] = "Divide",
+            }))
+            // Denominator and OperationType are set for all logging events in these brackets
+            
             if (Denominator == 0)
             {
-                return Results.BadRequest();
+              if (logger.IsEnabled(LogLevel.Error))
+              {
+                  logger.LogError("Denominator is zero");
+              }
+              return Results.BadRequest();
             }
-
+            if (logger.IsEnabled(LogLevel.Trace))
+            {
+                logger.LogTrace("Dividing {Numerator} by {Denominator}", Numerator, Denominator);
+            }
             return Results.Ok(Numerator / Denominator);
           })
         .WithName("Divide")

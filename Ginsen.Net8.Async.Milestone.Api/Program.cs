@@ -12,6 +12,21 @@ using Ginsen.Net8.Async.Milestone.Api.Endpoints.V1;
 using Asp.Versioning.Builder;
 using Asp.Versioning;
 using Serilog.Events;
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Metrics;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
+
+// // .NET Diagnostics: create the span factory
+// using var activitySource = new ActivitySource("Ginsen.Net8.Async.Milestone.Api");
+
+// // .NET Diagnostics: create a metric
+// using var meter = new Meter("ApiInitCount", "1.0");
+// var successCounter = meter.CreateCounter<long>("api.init.count", description: "Number of api initialisations");
+// successCounter.Add(1);
+// var createTableIfNotExistCounter = meter.CreateCounter<long>("table.create.count", description: "Number of table creation calls (even if it already exists)");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +53,55 @@ if (useOtlpExporter)
 Log.Logger = logBuilder.CreateLogger();
 builder.Services.AddSerilog();
 
+
+if (useOtlpExporter)
+{
+  builder.Services
+      .AddOpenTelemetry()
+      .ConfigureResource(resource => resource.AddService(builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown"))
+      .WithMetrics(metrics =>
+      {
+          metrics
+              .AddAspNetCoreInstrumentation();
+
+          /* Add more instrument here */
+
+          /* ============== */
+          /* Only export to OpenTelemetry collector */
+          /* ============== */
+
+          metrics
+              .AddOtlpExporter(_ =>
+              {
+                  _.Endpoint = new Uri(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317");
+                  _.ExportProcessorType = ExportProcessorType.Batch;
+                  _.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+              });
+      }).WithTracing(tracing =>
+    {
+        tracing
+            .SetErrorStatusOnException()
+            .SetSampler(new AlwaysOnSampler())
+            .AddAspNetCoreInstrumentation(options =>
+            {
+                options.RecordException = true;
+            });
+
+        /* Add more instrument here: MassTransit, NgSql ... */
+
+        /* ============== */
+        /* Only export to OpenTelemetry collector */
+        /* ============== */
+
+        tracing
+            .AddOtlpExporter(_ =>
+            {
+                _.Endpoint = new Uri(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317");
+                _.ExportProcessorType = ExportProcessorType.Batch;
+                _.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
+            });
+    });
+}
 // Remove default header (security issue)
 builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 // Add HealthChecks
@@ -133,7 +197,17 @@ if (Log.IsEnabled(LogEventLevel.Information))
 
 try
 {
-  await tableServiceClient.CreateTableIfNotExistsAsync("Dummies");
+  // // .NET Diagnostics: create a manual span
+  // using (var activity = activitySource.StartActivity("CreateTableIfNotExiste"))
+  // {
+  //     activity?.SetTag("TableName", "Dummies");
+
+      await tableServiceClient.CreateTableIfNotExistsAsync("Dummies");
+
+  //     activity?.SetStatus(ActivityStatusCode.Ok);
+  //     // .NET Diagnostics: update the metric
+  //     createTableIfNotExistCounter.Add(1);
+  // }
 }
 catch (Exception ex)
 {
