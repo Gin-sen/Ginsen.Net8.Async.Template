@@ -26,7 +26,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 19297,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 4,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -127,9 +127,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_working_set_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_working_set_bytes",
           "instant": false,
-          "legendFormat": "Working Set (api)",
+          "legendFormat": "Working Set",
           "range": true,
           "refId": "A"
         },
@@ -139,10 +139,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gc_heap_size_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gc_heap_size_bytes",
           "hide": false,
           "instant": false,
-          "legendFormat": "GC Heap Size (api)",
+          "legendFormat": "GC Heap Size",
           "range": true,
           "refId": "B"
         }
@@ -238,9 +238,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_cpu_usage_ratio{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_cpu_usage_ratio",
           "instant": false,
-          "legendFormat": "CPU Usage (api)",
+          "legendFormat": "CPU Usage",
           "range": true,
           "refId": "A"
         }
@@ -345,9 +345,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "microsoftaspnetcorehosting_requests_per_second{job=\"dotnet-monitor-api\"}",
+          "expr": "microsoftaspnetcorehosting_requests_per_second",
           "instant": false,
-          "legendFormat": "Requests per second (api)",
+          "legendFormat": "Requests per second",
           "range": true,
           "refId": "A"
         }
@@ -439,9 +439,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_exception_count{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_exception_count",
           "instant": false,
-          "legendFormat": "Exception Count (api)",
+          "legendFormat": "Exception Count",
           "range": true,
           "refId": "A"
         }
@@ -532,9 +532,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_threadpool_thread_count{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_threadpool_thread_count",
           "instant": false,
-          "legendFormat": "Threadpool thread count (api)",
+          "legendFormat": "Threadpool thread count",
           "range": true,
           "refId": "A"
         },
@@ -544,10 +544,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_threadpool_queue_length{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_threadpool_queue_length",
           "hide": false,
           "instant": false,
-          "legendFormat": "Threadpool queue length (api)",
+          "legendFormat": "Threadpool queue length",
           "range": true,
           "refId": "B"
         }
@@ -652,9 +652,9 @@
           },
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "systemruntime_gen_0_size_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gen_0_size_bytes",
           "instant": false,
-          "legendFormat": "Gen 0 size (api)",
+          "legendFormat": "Gen 0 size",
           "range": true,
           "refId": "A"
         },
@@ -664,10 +664,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gen_1_size_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gen_1_size_bytes",
           "hide": false,
           "instant": false,
-          "legendFormat": "Gen 1 size (api)",
+          "legendFormat": "Gen 1 size",
           "range": true,
           "refId": "B"
         },
@@ -677,10 +677,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gen_2_size_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gen_2_size_bytes",
           "hide": false,
           "instant": false,
-          "legendFormat": "Gen 2 size (api)",
+          "legendFormat": "Gen 2 size",
           "range": true,
           "refId": "C"
         },
@@ -690,10 +690,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_poh_size_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_poh_size_bytes",
           "hide": false,
           "instant": false,
-          "legendFormat": "POH size (api)",
+          "legendFormat": "POH size",
           "range": true,
           "refId": "D"
         },
@@ -703,10 +703,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_loh_size_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_loh_size_bytes",
           "hide": false,
           "instant": false,
-          "legendFormat": "LOH size (api)",
+          "legendFormat": "LOH size",
           "range": true,
           "refId": "E"
         }
@@ -798,9 +798,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_alloc_rate_bytes{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_alloc_rate_bytes",
           "instant": false,
-          "legendFormat": "Allocation rate bytes (api)",
+          "legendFormat": "Allocation rate bytes",
           "range": true,
           "refId": "A"
         }
@@ -894,9 +894,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_time_in_gc_ratio{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_time_in_gc_ratio",
           "instant": false,
-          "legendFormat": "% Time in GC since last GC (api)",
+          "legendFormat": "% Time in GC since last GC",
           "range": true,
           "refId": "A"
         }
@@ -1015,9 +1015,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gc_fragmentation_ratio{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gc_fragmentation_ratio",
           "instant": false,
-          "legendFormat": "GC Fragmentation (api)",
+          "legendFormat": "GC Fragmentation",
           "range": true,
           "refId": "A"
         }
@@ -1107,9 +1107,9 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gen_0_gc_count{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gen_0_gc_count",
           "instant": false,
-          "legendFormat": "Gen 0 GC count (api)",
+          "legendFormat": "Gen 0 GC count",
           "range": true,
           "refId": "A"
         },
@@ -1119,10 +1119,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gen_1_gc_count{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gen_1_gc_count",
           "hide": false,
           "instant": false,
-          "legendFormat": "Gen 1 GC count (api)",
+          "legendFormat": "Gen 1 GC count",
           "range": true,
           "refId": "B"
         },
@@ -1132,10 +1132,10 @@
             "uid": "prom"
           },
           "editorMode": "builder",
-          "expr": "systemruntime_gen_2_gc_count{job=\"dotnet-monitor-api\"}",
+          "expr": "systemruntime_gen_2_gc_count",
           "hide": false,
           "instant": false,
-          "legendFormat": "Gen 2 GC count (api)",
+          "legendFormat": "Gen 2 GC count",
           "range": true,
           "refId": "C"
         }
@@ -1161,12 +1161,11 @@
             "condition": "",
             "key": "job",
             "operator": "=",
-            "value": "dotnet-monitor-api"
+            "value": "dotnet-monitor-backoffice"
           }
         ],
-        "hide": 1,
-        "label": "service_name",
-        "name": "job",
+        "hide": 0,
+        "name": "Service",
         "skipUrlSync": false,
         "type": "adhoc"
       }
@@ -1178,8 +1177,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "dotnet-monitor dashboard",
-  "uid": "fdd09c1e-ae4c-4ea5-8bc3-1ea7a0689e96",
-  "version": 14,
+  "title": "BackOffice",
+  "uid": "YUYbmLTHk",
+  "version": 1,
   "weekStart": ""
 }

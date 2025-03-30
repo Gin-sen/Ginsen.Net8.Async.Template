@@ -4,7 +4,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       # Dotnet monitor
       - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
-      # - ASPNETCORE_HTTP_PORTS=8080
       # OpenTelemetry environmental variables:
       - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.api
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
@@ -34,6 +33,8 @@ services:
   ginsen.net8.async.milestone.worker:
     environment:
       - DOTNET_ENVIRONMENT=Docker
+      # Dotnet monitor
+      - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
       # OpenTelemetry environmental variables:
       - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.worker
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
@@ -63,6 +64,8 @@ services:
   ginsen.net8.async.milestone.backoffice:
     environment:
       - DOTNET_ENVIRONMENT=Docker
+      # Dotnet monitor
+      - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
       # OpenTelemetry environmental variables:
       - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.backoffice
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
@@ -181,7 +184,9 @@ services:
 
   grafana:
     volumes:
-      - ./compose/grafana/datasources/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./compose/grafana/conf/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./compose/grafana/conf/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./compose/grafana/dashboards/:/var/lib/grafana/dashboards/
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"

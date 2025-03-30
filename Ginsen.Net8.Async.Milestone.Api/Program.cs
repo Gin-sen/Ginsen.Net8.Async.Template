@@ -11,14 +11,28 @@ using Ginsen.Net8.Async.Milestone.Application.Repositories;
 using Ginsen.Net8.Async.Milestone.Api.Endpoints.V1;
 using Asp.Versioning.Builder;
 using Asp.Versioning;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configure logging
-builder.Services.AddSerilog((services, lc) =>
+var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+var logBuilder = new LoggerConfiguration()
+ .Enrich.FromLogContext()
+ .WriteTo.Console();
+
+if (useOtlpExporter)
 {
-  lc.ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext();
-});
+    logBuilder
+       .WriteTo.OpenTelemetry(options =>
+     {
+         options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+         options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+     });
+}
+
+Log.Logger = logBuilder.CreateBootstrapLogger();
+
+builder.Logging.AddSerilog(Log.Logger, dispose: true);
 // Remove default header (security issue)
 builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));
 // Add HealthChecks
@@ -106,13 +120,13 @@ MathEndpoints.MapMathEndpoints(app, apiVersionSet);
 
 ILogger<Program> logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-if (logger.IsEnabled(LogLevel.Information))
-  logger.LogInformation("Initialisation");
+if (Log.Logger.IsEnabled(LogEventLevel.Information))
+  Log.Logger.Information("Initialisation");
 
 TableServiceClient tableServiceClient = app.Services.GetRequiredService<TableServiceClient>();
 
-if (logger.IsEnabled(LogLevel.Information))
-  logger.LogInformation("Creating table Dummies if not exists");
+if (Log.Logger.IsEnabled(LogEventLevel.Information))
+  Log.Logger.Information("Creating table Dummies if not exists");
 
 try
 {
@@ -120,17 +134,12 @@ try
 }
 catch (Exception ex)
 {
-  if (logger.IsEnabled(LogLevel.Critical))
-    logger.LogCritical(ex, "Error creating table Dummies");
-  return 1;
+  if (Log.Logger.IsEnabled(LogEventLevel.Fatal))
+    Log.Logger.Fatal(ex, "Error creating table Dummies");
+  throw;
 }
 
-if (logger.IsEnabled(LogLevel.Information))
-  logger.LogInformation("Starting web application");
+if (Log.Logger.IsEnabled(LogEventLevel.Information))
+  Log.Logger.Information("Starting web application");
 
 await app.RunAsync();
-
-if (logger.IsEnabled(LogLevel.Information))
-  logger.LogInformation("Application shutdown gracefully");
-
-return 0;

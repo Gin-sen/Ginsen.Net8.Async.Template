@@ -51,21 +51,16 @@ helm upgrade --install ginsen-net8-async-milestone gin-sen/ginsen-net8-async-mil
 ```
 
 
-## Notes
+##  Docker Compose
 
-Conf pour prometheus :
+| Usage  | Lien |
+|--------|------|
+| BackOffice | http://localhost:8080 |
+| Api | http://localhost:8082/swagger |
 
-```yaml
-scrape_configs:
-- job_name: dotnet-monitor
-  honor_timestamps: true
-  scrape_interval: 2s
-  scrape_timeout: 2s
-  metrics_path: /metrics
-  scheme: http
-  kubernetes_sd_configs:
-    - role: pod
-      selectors:
-        - role: "pod"
-          label: "dotnet-monitor.io/monitor=true"
-```
+| Outil | Lien | Usage |
+|------|-------|-------|
+| Grafana | http://localhost:3000 | Monitoring (Dashboards) |
+| Prometheus | http://localhost:9090 | Scraping et stockage de métriques |
+| Jaeger | http://localhost:16686 | Traces | 
+| RabbitMQ | http://localhost:15672 | Interface de management |

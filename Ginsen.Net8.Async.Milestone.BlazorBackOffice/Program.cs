@@ -1,8 +1,28 @@
 using Ginsen.Net8.Async.Milestone.BlazorBackOffice.Components;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure logging
+var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+var logBuilder = new LoggerConfiguration()
+ .Enrich.FromLogContext()
+ .WriteTo.Console();
+
+if (useOtlpExporter)
+{
+    logBuilder
+       .WriteTo.OpenTelemetry(options =>
+     {
+         options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+         options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+     });
+}
+
+Log.Logger = logBuilder.CreateBootstrapLogger();
+
+builder.Logging.AddSerilog(Log.Logger, dispose: true);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -31,4 +51,4 @@ app.UseHealthChecks("/health");
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.Run();
+await app.RunAsync();

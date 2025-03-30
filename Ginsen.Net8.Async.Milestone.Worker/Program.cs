@@ -1,25 +1,30 @@
 using Ginsen.Net8.Async.Milestone.Worker;
 using Serilog;
-try
-{
-  var builder = Host.CreateApplicationBuilder(args);
 
-  builder.Services.AddSerilog((services, lc) =>
-  {
-    lc.ReadFrom.Configuration(builder.Configuration)
-      .Enrich.FromLogContext();
-  });
-  // builder.Services.AddHealthChecks();
-  builder.Services.AddHostedService<Worker>();
 
-  using var host = builder.Build();
-  host.Run();
-}
-catch (Exception ex)
+var builder = Host.CreateApplicationBuilder(args);
+
+// Configure logging
+var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+var logBuilder = new LoggerConfiguration()
+ .Enrich.FromLogContext()
+ .WriteTo.Console();
+
+if (useOtlpExporter)
 {
-  Log.Fatal(ex, "Application terminated unexpectedly");
+    logBuilder
+       .WriteTo.OpenTelemetry(options =>
+     {
+         options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
+         options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+     });
 }
-finally
-{
-  Log.CloseAndFlush();
-}
+
+Log.Logger = logBuilder.CreateBootstrapLogger();
+
+builder.Logging.AddSerilog(Log.Logger, dispose: true);
+// builder.Services.AddHealthChecks();
+builder.Services.AddHostedService<Worker>();
+
+using var host = builder.Build();
+await host.RunAsync();
