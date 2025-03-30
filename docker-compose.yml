@@ -24,6 +24,17 @@ services:
     networks:
       - backend-net
 
+  ginsen.net8.async.milestone.backoffice:
+    image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-backoffice:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final-backoffice
+      args:
+        - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
+      # dockerfile: Ginsen.Net8.Async.Milestone.BlazorBackOffice/Dockerfile
+    networks:
+      - backend-net
       
   rabbit:
     image: rabbitmq:4-management
@@ -38,6 +49,49 @@ services:
 
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
+    networks:
+      - backend-net
+      
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.88.0
+    networks:
+      - backend-net
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.50.0
+    networks:
+      - backend-net
+
+  prometheus:
+    image: prom/prometheus:v2.42.0
+    networks:
+      - backend-net
+
+  loki:
+    image: grafana/loki:2.7.4
+    networks:
+      - backend-net
+
+  promtail:
+    image: grafana/promtail:latest
+    networks:
+      - backend-net
+
+  grafana:
+    image: grafana/grafana:9.4.3
+    networks:
+      - backend-net
+
+  monitor-api:
+    image: mcr.microsoft.com/dotnet/monitor:8
+    networks:
+      - backend-net
+  monitor-worker:
+    image: mcr.microsoft.com/dotnet/monitor:8
+    networks:
+      - backend-net
+  monitor-backoffice:
+    image: mcr.microsoft.com/dotnet/monitor:8
     networks:
       - backend-net
 

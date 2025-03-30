@@ -2,15 +2,92 @@ services:
   ginsen.net8.async.milestone.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+      # Dotnet monitor
+      - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
       # - ASPNETCORE_HTTP_PORTS=8080
+      # OpenTelemetry environmental variables:
+      - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.api
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Api
+      - OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Api
+      # enable OpenTelemetry .NET Automatic Instrumentation
+      - CORECLR_ENABLE_PROFILING=1
+      - CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318}
+      - CORECLR_PROFILER_PATH=/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so
+      - DOTNET_ADDITIONAL_DEPS=/otel-dotnet-auto/AdditionalDeps
+      - DOTNET_SHARED_STORE=/otel-dotnet-auto/store
+      - DOTNET_STARTUP_HOOKS=/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll
+      - OTEL_DOTNET_AUTO_HOME=/otel-dotnet-auto
+    volumes:
+      - diagvol-api:/diag
     ports:
       - "8082:8080"
+    depends_on:
+      - azurite
+      - otel-collector
+    deploy:
+      resources:
+        limits:
+          cpus: '0.250'
+          memory: 512M
 
   ginsen.net8.async.milestone.worker:
     environment:
       - DOTNET_ENVIRONMENT=Docker
+      # OpenTelemetry environmental variables:
+      - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.worker
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Worker
+      - OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.Worker
+      # enable OpenTelemetry .NET Automatic Instrumentation
+      - CORECLR_ENABLE_PROFILING=1
+      - CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318}
+      - CORECLR_PROFILER_PATH=/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so
+      - DOTNET_ADDITIONAL_DEPS=/otel-dotnet-auto/AdditionalDeps
+      - DOTNET_SHARED_STORE=/otel-dotnet-auto/store
+      - DOTNET_STARTUP_HOOKS=/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll
+      - OTEL_DOTNET_AUTO_HOME=/otel-dotnet-auto
+    volumes:
+      - diagvol-worker:/diag
+    depends_on:
+      - azurite
+      - otel-collector
     # ports:
     #   - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.250'
+          memory: 512M
+
+  ginsen.net8.async.milestone.backoffice:
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+      # OpenTelemetry environmental variables:
+      - OTEL_SERVICE_NAME=ginsen.net8.async.milestone.backoffice
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.BlazorBackOffice
+      - OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES=Ginsen.Net8.Async.Milestone.BlazorBackOffice
+      # enable OpenTelemetry .NET Automatic Instrumentation
+      - CORECLR_ENABLE_PROFILING=1
+      - CORECLR_PROFILER={918728DD-259F-4A6A-AC2B-B85E1B658318}
+      - CORECLR_PROFILER_PATH=/otel-dotnet-auto/linux-x64/OpenTelemetry.AutoInstrumentation.Native.so
+      - DOTNET_ADDITIONAL_DEPS=/otel-dotnet-auto/AdditionalDeps
+      - DOTNET_SHARED_STORE=/otel-dotnet-auto/store
+      - DOTNET_STARTUP_HOOKS=/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll
+      - OTEL_DOTNET_AUTO_HOME=/otel-dotnet-auto
+    depends_on:
+      - ginsen.net8.async.milestone.api
+      - otel-collector
+    volumes:
+      - diagvol-backoffice:/diag
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.250'
+          memory: 512M
 
   rabbit:
     labels:
@@ -59,7 +136,156 @@ services:
       - "10002:10002"
     volumes:
       - azurite-data:/workspace
+
+
+  # OpenTelemetry Collector
+  otel-collector:
+    volumes:
+      - ./compose/otel/otel-config.yaml:/etc/otel/config.yaml
+    command: --config /etc/otel/config.yaml
+    environment:
+      JAEGER_ENDPOINT: "jaeger:4317"
+      LOKI_ENDPOINT: "http://loki:3100/loki/api/v1/push"
+    ports:
+      - "8889:8889"   # Prometheus metrics exporter (scrape endpoint)
+      - "13133:13133" # health_check extension
+      - "55679:55679" # ZPages extension
+    depends_on:
+      - jaeger
+      - prometheus
+      - loki
+
+  jaeger:
+    ports:
+      - "16686:16686"
+
+  prometheus:
+    volumes:
+      - ./compose/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  loki:
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./compose/loki/loki-local-config.yaml:/etc/loki/loki-config.yaml
+    ports:
+      - "3100:3100"
+
+  promtail:
+    volumes:
+      - ./compose/promtail/promtail-config.yaml:/etc/promtail/config.yml
+      - ./log:/var/log:wr
+    command: -config.file=/etc/promtail/config.yml
+
+
+  grafana:
+    volumes:
+      - ./compose/grafana/datasources/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+    ports:
+      - "3000:3000"
+
+  monitor-api:
+    # DO NOT use the --no-auth argument for deployments in production; this argument is used for demonstration
+    # purposes only in this example. Please continue reading after this example for further details.
+    command: ["collect", "--no-auth"]
+    ports:
+      - "52323:52323"
+      - "52325:52325"
+    environment:
+      - DOTNETMONITOR_DiagnosticPort__ConnectionMode=Listen
+      - DOTNETMONITOR_Storage__DefaultSharedPath=/diag
+      # ALWAYS use the HTTPS form of the URL for deployments in production; the removal of HTTPS is done for
+      # demonstration purposes only in this example. Please continue reading after this example for further details.
+      - DOTNETMONITOR_Urls=http://+:52323
+      # The metrics URL is set in the CMD instruction of the image by default. However, this deployment overrides that with the args setting; manually set the URL to the same value using configuration.
+      - DOTNETMONITOR_Metrics__Endpoints=http://+:52325
+      # The image will output logging in a json format by default, which is great for ingestion by tools such as Azure Monitor Log Analytics.
+      # Switch the logging format to simple for this sample for easier reading.
+      - Logging__Console__FormatterName=simple
+    volumes:
+      - diagvol-api:/diag
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.050'
+          memory: 50M
+        limits:
+          cpus: '0.250'
+          memory: 256M
+
+  monitor-worker:
+    # DO NOT use the --no-auth argument for deployments in production; this argument is used for demonstration
+    # purposes only in this example. Please continue reading after this example for further details.
+    command: ["collect", "--no-auth"]
+    ports:
+      - "52324:52323"
+      - "52326:52325"
+    environment:
+      - DOTNETMONITOR_DiagnosticPort__ConnectionMode=Listen
+      - DOTNETMONITOR_Storage__DefaultSharedPath=/diag
+      # ALWAYS use the HTTPS form of the URL for deployments in production; the removal of HTTPS is done for
+      # demonstration purposes only in this example. Please continue reading after this example for further details.
+      - DOTNETMONITOR_Urls=http://+:52323
+      # The metrics URL is set in the CMD instruction of the image by default. However, this deployment overrides that with the args setting; manually set the URL to the same value using configuration.
+      - DOTNETMONITOR_Metrics__Endpoints=http://+:52325
+      # The image will output logging in a json format by default, which is great for ingestion by tools such as Azure Monitor Log Analytics.
+      # Switch the logging format to simple for this sample for easier reading.
+      - Logging__Console__FormatterName=simple
+    volumes:
+      - diagvol-worker:/diag
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.050'
+          memory: 50M
+        limits:
+          cpus: '0.250'
+          memory: 256M
+  monitor-backoffice:
+    # DO NOT use the --no-auth argument for deployments in production; this argument is used for demonstration
+    # purposes only in this example. Please continue reading after this example for further details.
+    command: ["collect", "--no-auth"]
+    ports:
+      - "52327:52323"
+      - "52328:52325"
+    environment:
+      - DOTNETMONITOR_DiagnosticPort__ConnectionMode=Listen
+      - DOTNETMONITOR_Storage__DefaultSharedPath=/diag
+      # ALWAYS use the HTTPS form of the URL for deployments in production; the removal of HTTPS is done for
+      # demonstration purposes only in this example. Please continue reading after this example for further details.
+      - DOTNETMONITOR_Urls=http://+:52323
+      # The metrics URL is set in the CMD instruction of the image by default. However, this deployment overrides that with the args setting; manually set the URL to the same value using configuration.
+      - DOTNETMONITOR_Metrics__Endpoints=http://+:52325
+      # The image will output logging in a json format by default, which is great for ingestion by tools such as Azure Monitor Log Analytics.
+      # Switch the logging format to simple for this sample for easier reading.
+      - Logging__Console__FormatterName=simple
+    volumes:
+      - diagvol-backoffice:/diag
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.050'
+          memory: 50M
+        limits:
+          cpus: '0.250'
+          memory: 256M
 volumes:
   rabbit-data: {}
   postgres-data: {}
   azurite-data: {}
+  diagvol-api:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  diagvol-worker:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  diagvol-backoffice:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
