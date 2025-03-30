@@ -15,9 +15,9 @@ namespace Ginsen.Net8.Async.Milestone.Worker
       {
         try
         {
-          if (_logger.IsEnabled(LogLevel.Debug))
+          if (_logger.IsEnabled(LogLevel.Information))
           {
-            _logger.LogDebug("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
           }
           await Task.Delay(1_000 * 30, stoppingToken);
         }
