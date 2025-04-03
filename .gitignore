@@ -366,5 +366,3 @@ FodyWeavers.xsd
 ca.crt
 
 .env
-
-!loki-logs.json
