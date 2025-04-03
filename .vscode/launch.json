@@ -9,7 +9,7 @@
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
-            "containerName": "ginsen-net8-async-milestone-ginsen.net8.async.milestone.api-1",
+            "containerName": "ginsen-net8-async-milestone-ginsen-net8-async-milestone-api-1",
             "sourceFileMap": {
                 "/src": "${workspaceFolder}"
             }
@@ -19,7 +19,7 @@
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
-            "containerName": "ginsen-net8-async-milestone-ginsen.net8.async.milestone.worker-1",
+            "containerName": "ginsen-net8-async-milestone-ginsen-net8-async-milestone-worker-1",
             "sourceFileMap": {
                 "/src": "${workspaceFolder}"
             }

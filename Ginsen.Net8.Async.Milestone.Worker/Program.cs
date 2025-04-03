@@ -1,15 +1,11 @@
 using Ginsen.Net8.Async.Milestone.Worker;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 
-var configuration = new ConfigurationBuilder()
-  .SetBasePath(Directory.GetCurrentDirectory())
-  .AddJsonFile("appsettings.json", false, true)
-  .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
-  .AddEnvironmentVariables()
-  .Build();
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Configuration.AddConfiguration(configuration);
 
 // Configure logging
 var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
@@ -24,21 +20,46 @@ var logBuilder = new LoggerConfiguration()
 if (useOtlpExporter)
 {
   logBuilder
-      .WriteTo.OpenTelemetry(options =>
-    {
-      options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-      options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
-    });
+      .WriteTo.OpenTelemetry();
 }
 
 Log.Logger = logBuilder.CreateLogger();
 builder.Services.AddSerilog();
 
+
+if (useOtlpExporter)
+{
+  builder.Services
+      .AddOpenTelemetry()
+      .ConfigureResource(resource => 
+      {
+        resource.AddService(builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+      })
+      .WithMetrics(metrics =>
+      {
+        metrics
+          .AddHttpClientInstrumentation();
+        /* Add more instrument here */
+        metrics
+          .AddMeter(DiagnosticsConfig.Meter.Name);
+        metrics
+          .AddOtlpExporter();
+      }).WithTracing(tracing =>
+    {
+      tracing
+        .SetSampler(new AlwaysOnSampler())
+        .AddHttpClientInstrumentation();
+      tracing
+        .AddSource(DiagnosticsConfig.ActivitySource.Name);
+      /* Add more instrument here: MassTransit, NgSql ... */
+      tracing
+        .AddOtlpExporter();
+    });
+}
+
 // builder.Services.AddHealthChecks();
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
-await Task.Delay(100);
-await host.RunAsync();
-
+host.Run();
 Log.Information("Stopped cleanly");

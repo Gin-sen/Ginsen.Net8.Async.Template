@@ -1,5 +1,8 @@
 using Ginsen.Net8.Async.Milestone.BlazorBackOffice.Components;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 
 
@@ -19,17 +22,45 @@ var logBuilder = new LoggerConfiguration()
 if (useOtlpExporter)
 {
   logBuilder
-      .WriteTo.OpenTelemetry(options =>
-    {
-      options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-      options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
-    });
+      .WriteTo.OpenTelemetry();
 }
 
 Log.Logger = logBuilder.CreateLogger();
-
 builder.Services.AddSerilog();
 
+
+if (useOtlpExporter)
+{
+  builder.Services
+      .AddOpenTelemetry()
+      .ConfigureResource(resource => 
+      {
+        resource.AddService(builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+      })
+      .WithMetrics(metrics =>
+      {
+          metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation();
+          /* Add more instrument here */
+
+          metrics
+            .AddOtlpExporter();
+      }).WithTracing(tracing =>
+    {
+        tracing
+          .SetErrorStatusOnException()
+          .SetSampler(new AlwaysOnSampler())
+          .AddAspNetCoreInstrumentation(options =>
+          {
+              options.RecordException = true;
+          })
+          .AddHttpClientInstrumentation();
+        /* Add more instrument here: MassTransit, NgSql ... */
+        tracing
+          .AddOtlpExporter();
+    });
+}
 // Add services to the container.
 builder.Services.AddRazorComponents()
   .AddInteractiveServerComponents();

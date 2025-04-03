@@ -31,12 +31,12 @@
     "fullNameDockerService": {
       "type": "derived",
       "valueSource": "name", // name -> pointe sur le nom du nouveau projet
-      "valueTransform": "lc",
-      "replaces": "ginsen.net8.async.milestone"
+      "valueTransform": "dotToDashLowerCase",
+      "replaces": "ginsen-net8-async-milestone"
     },
     "fullNameDockerImage": {
       "type": "derived",
-      "valueSource": "name", // name -> pointe sur le nom du nouveau projet
+      "valueSource": "name",
       "valueTransform": "dotToDashLowerCase",
       "replaces": "ginsen-net8-async-milestone"
     },

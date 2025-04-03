@@ -19,15 +19,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 
-// // .NET Diagnostics: create the span factory
-// using var activitySource = new ActivitySource("Ginsen.Net8.Async.Milestone.Api");
-
-// // .NET Diagnostics: create a metric
-// using var meter = new Meter("ApiInitCount", "1.0");
-// var successCounter = meter.CreateCounter<long>("api.init.count", description: "Number of api initialisations");
-// successCounter.Add(1);
-// var createTableIfNotExistCounter = meter.CreateCounter<long>("table.create.count", description: "Number of table creation calls (even if it already exists)");
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure logging
@@ -43,11 +34,7 @@ var logBuilder = new LoggerConfiguration()
 if (useOtlpExporter)
 {
   logBuilder
-      .WriteTo.OpenTelemetry(options =>
-    {
-      options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-      options.ResourceAttributes.Add("service.name", builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
-    });
+      .WriteTo.OpenTelemetry();
 }
 
 Log.Logger = logBuilder.CreateLogger();
@@ -58,48 +45,32 @@ if (useOtlpExporter)
 {
   builder.Services
       .AddOpenTelemetry()
-      .ConfigureResource(resource => resource.AddService(builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown"))
+      .ConfigureResource(resource => 
+      {
+        resource.AddService(builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown");
+      })
       .WithMetrics(metrics =>
       {
           metrics
-              .AddAspNetCoreInstrumentation();
-
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation();
           /* Add more instrument here */
 
-          /* ============== */
-          /* Only export to OpenTelemetry collector */
-          /* ============== */
-
           metrics
-              .AddOtlpExporter(_ =>
-              {
-                  _.Endpoint = new Uri(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317");
-                  _.ExportProcessorType = ExportProcessorType.Batch;
-                  _.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
-              });
+            .AddOtlpExporter();
       }).WithTracing(tracing =>
     {
         tracing
-            .SetErrorStatusOnException()
-            .SetSampler(new AlwaysOnSampler())
-            .AddAspNetCoreInstrumentation(options =>
-            {
-                options.RecordException = true;
-            });
-
+          .SetErrorStatusOnException()
+          .SetSampler(new AlwaysOnSampler())
+          .AddAspNetCoreInstrumentation(options =>
+          {
+              options.RecordException = true;
+          })
+          .AddHttpClientInstrumentation();
         /* Add more instrument here: MassTransit, NgSql ... */
-
-        /* ============== */
-        /* Only export to OpenTelemetry collector */
-        /* ============== */
-
         tracing
-            .AddOtlpExporter(_ =>
-            {
-                _.Endpoint = new Uri(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"] ?? "http://localhost:4317");
-                _.ExportProcessorType = ExportProcessorType.Batch;
-                _.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
-            });
+          .AddOtlpExporter();
     });
 }
 // Remove default header (security issue)
@@ -222,3 +193,4 @@ if (Log.IsEnabled(LogEventLevel.Information))
 await app.RunAsync();
 
 Log.Information("Stopped cleanly");
+Log.CloseAndFlush();

@@ -1,5 +1,5 @@
 services:
-  ginsen.net8.async.milestone.api:
+  ginsen-net8-async-milestone-api:
     image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-api:dev
     build:
       context: .
@@ -7,12 +7,12 @@ services:
       target: final-api
       args:
         - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
-      # dockerfile: Ginsen.Net8.Async.Milestone.Api/Dockerfile
+      # dockerfile: ginsen-net8-async-milestone-Api/Dockerfile
     networks:
       - backend-net
 
 
-  ginsen.net8.async.milestone.worker:
+  ginsen-net8-async-milestone-worker:
     image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-worker:dev
     build:
       context: .
@@ -20,11 +20,11 @@ services:
       target: final-worker
       args:
         - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
-      # dockerfile: Ginsen.Net8.Async.Milestone.Worker/Dockerfile
+      # dockerfile: ginsen-net8-async-milestone-Worker/Dockerfile
     networks:
       - backend-net
 
-  ginsen.net8.async.milestone.backoffice:
+  ginsen-net8-async-milestone-backoffice:
     image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-backoffice:dev
     build:
       context: .
@@ -32,7 +32,7 @@ services:
       target: final-backoffice
       args:
         - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
-      # dockerfile: Ginsen.Net8.Async.Milestone.BlazorBackOffice/Dockerfile
+      # dockerfile: ginsen-net8-async-milestone-BlazorBackOffice/Dockerfile
     networks:
       - backend-net
       

@@ -4,14 +4,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 LABEL org.opencontainers.image.source=https://github.com/Gin-sen/Ginsen.Net8.Async.Template
 WORKDIR /app
-# install OpenTelemetry .NET Automatic Instrumentation
-ARG OTEL_VERSION=1.11.0
-ADD https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v${OTEL_VERSION}/otel-dotnet-auto-install.sh otel-dotnet-auto-install.sh
-RUN apt-get update && apt-get install -y unzip curl && \
-      OTEL_DOTNET_AUTO_HOME="/otel-dotnet-auto" sh otel-dotnet-auto-install.sh
-RUN rm -rf otel-dotnet-auto-install.sh && \
-    apt-get remove -y unzip curl
-
 EXPOSE 8080
 EXPOSE 8081
 USER app

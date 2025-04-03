@@ -13,6 +13,7 @@ namespace Ginsen.Net8.Async.Milestone.Worker
     {
       while (!stoppingToken.IsCancellationRequested)
       {
+        using var activitySource = DiagnosticsConfig.ActivitySource.StartActivity("Worker Running");
         try
         {
           if (_logger.IsEnabled(LogLevel.Information))
@@ -20,6 +21,9 @@ namespace Ginsen.Net8.Async.Milestone.Worker
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
           }
           await Task.Delay(1_000 * 30, stoppingToken);
+          // var labels = new KeyValuePair<string, object?>[] { new("worker", "running") };
+          // DiagnosticsConfig.Counter.Add(1, labels);
+          DiagnosticsConfig.Counter.Add(1);
         }
         catch (Exception ex)
         {
