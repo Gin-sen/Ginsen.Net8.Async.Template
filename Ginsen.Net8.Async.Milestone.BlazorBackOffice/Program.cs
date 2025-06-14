@@ -64,6 +64,10 @@ if (useOtlpExporter)
 // Add services to the container.
 builder.Services.AddRazorComponents()
   .AddInteractiveServerComponents();
+builder.Services.AddHttpClient("Api_ServerSide", o => {
+  o.BaseAddress = new Uri(builder.Configuration["HttpServices:Api_ServerSide:BaseUrl"] ?? "https://localhost:8080/");
+});
+builder.Services.AddScoped<IAzureTablesHttpRepository, AzureTablesHttpRepository>();
 
 // Remove default header (security issue)
 builder.Services.Configure<KestrelServerOptions>(builder.Configuration.GetSection("Kestrel"));

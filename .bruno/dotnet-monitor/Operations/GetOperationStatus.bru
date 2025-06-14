@@ -1,0 +1,15 @@
+meta {
+  name: GetOperationStatus
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/operations/:operationId
+  body: none
+  auth: none
+}
+
+params:path {
+  operationId: 
+}

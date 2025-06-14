@@ -1,0 +1,17 @@
+meta {
+  name: Get information about the specified process-
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/process
+  body: none
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+}

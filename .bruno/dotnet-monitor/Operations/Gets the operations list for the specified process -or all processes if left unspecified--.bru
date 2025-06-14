@@ -1,0 +1,18 @@
+meta {
+  name: Gets the operations list for the specified process -or all processes if left unspecified--
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/operations
+  body: none
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+  ~tags: 
+}

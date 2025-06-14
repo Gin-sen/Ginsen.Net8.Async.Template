@@ -1,0 +1,28 @@
+meta {
+  name: Capture a stream of logs from a process-
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/logs
+  body: json
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+  ~durationSeconds: 
+  ~egressProvider: 
+  ~tags: 
+}
+
+body:json {
+  {
+    "logLevel": "",
+    "filterSpecs": {},
+    "useAppFilters": ""
+  }
+}

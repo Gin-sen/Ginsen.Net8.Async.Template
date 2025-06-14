@@ -1,0 +1,34 @@
+meta {
+  name: CaptureParameters
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/parameters
+  body: json
+  auth: none
+}
+
+params:query {
+  ~durationSeconds: 
+  ~pid: 
+  ~uid: 
+  ~name: 
+  ~egressProvider: 
+  ~tags: 
+}
+
+body:json {
+  {
+    "methods": [
+      {
+        "moduleName": "",
+        "typeName": "",
+        "methodName": ""
+      }
+    ],
+    "useDebuggerDisplayAttribute": "",
+    "captureLimit": ""
+  }
+}

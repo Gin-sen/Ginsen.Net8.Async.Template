@@ -23,6 +23,16 @@
             "sourceFileMap": {
                 "/src": "${workspaceFolder}"
             }
+        },
+        {
+            "name": "Docker .NET Attach BackOffice (Preview)",
+            "type": "docker",
+            "request": "attach",
+            "platform": "netCore",
+            "containerName": "ginsen-net8-async-milestone-ginsen-net8-async-milestone-backoffice-1",
+            "sourceFileMap": {
+                "/src": "${workspaceFolder}"
+            }
         }
     ]
 }

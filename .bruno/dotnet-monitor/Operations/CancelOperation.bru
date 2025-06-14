@@ -1,0 +1,19 @@
+meta {
+  name: CancelOperation
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/operations/:operationId
+  body: none
+  auth: none
+}
+
+params:query {
+  ~stop: 
+}
+
+params:path {
+  operationId: 
+}

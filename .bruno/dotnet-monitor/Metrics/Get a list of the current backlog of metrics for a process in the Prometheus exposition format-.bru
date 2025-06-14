@@ -1,0 +1,11 @@
+meta {
+  name: Get a list of the current backlog of metrics for a process in the Prometheus exposition format-
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/metrics
+  body: none
+  auth: none
+}

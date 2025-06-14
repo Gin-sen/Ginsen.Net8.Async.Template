@@ -1,0 +1,19 @@
+meta {
+  name: Capture a GC dump of a process-
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/gcdump
+  body: none
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+  ~egressProvider: 
+  ~tags: 
+}

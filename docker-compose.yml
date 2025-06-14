@@ -64,9 +64,32 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.42.0
+    depends_on:
+    - cadvisor
     networks:
       - backend-net
 
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8090:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+    - redis
+    networks:
+      - backend-net
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+    - 6379:6379
+    networks:
+      - backend-net
   loki:
     image: grafana/loki:2.7.4
     networks:

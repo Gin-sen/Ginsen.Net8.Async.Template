@@ -1,0 +1,17 @@
+meta {
+  name: Get the environment block of the specified process-
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/env
+  body: none
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+}

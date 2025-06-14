@@ -1,0 +1,20 @@
+meta {
+  name: Capture a dump of a process-
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/dump
+  body: none
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+  ~type: 
+  ~egressProvider: 
+  ~tags: 
+}

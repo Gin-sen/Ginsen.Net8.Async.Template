@@ -5,6 +5,12 @@ namespace Ginsen.Net8.Async.Milestone.Infrastructure.AzureStorageAccount.Reposit
 public interface IDummiesRepository
 {
     Task<DummyEntity> GetEntityAsync(string partitionKey, string rowKey, CancellationToken cancellationToken = default);
+    Task<IEnumerable<DummyEntity>> GetEntityListAsync(
+        string partitionKey = "*",
+        string rowKey = "*",
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default);
     Task<DummyEntity> UpsertEntityAsync(DummyEntity entity, CancellationToken cancellationToken = default);
     Task DeleteEntityAsync(string partitionKey, string rowKey, CancellationToken cancellationToken = default);
 }

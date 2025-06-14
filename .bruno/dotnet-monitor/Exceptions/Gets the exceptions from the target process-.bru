@@ -1,0 +1,40 @@
+meta {
+  name: Gets the exceptions from the target process-
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/exceptions
+  body: json
+  auth: none
+}
+
+params:query {
+  ~pid: 
+  ~uid: 
+  ~name: 
+  ~egressProvider: 
+  ~tags: 
+}
+
+body:json {
+  {
+    "include": [
+      {
+        "exceptionType": "",
+        "moduleName": "",
+        "typeName": "",
+        "methodName": ""
+      }
+    ],
+    "exclude": [
+      {
+        "exceptionType": "",
+        "moduleName": "",
+        "typeName": "",
+        "methodName": ""
+      }
+    ]
+  }
+}

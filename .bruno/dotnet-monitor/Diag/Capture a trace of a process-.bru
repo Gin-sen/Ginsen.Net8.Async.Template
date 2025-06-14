@@ -1,0 +1,92 @@
+meta {
+  name: Capture a trace of a process-
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/trace
+  body: json
+  auth: none
+}
+
+params:query {
+  ~pid: 1
+  ~uid: 
+  ~name: 
+  ~durationSeconds: 10
+  ~egressProvider: 
+  ~tags: 
+}
+
+body:json {
+  {
+    "providers": [
+      {
+        "name": "Microsoft-Windows-DotNETRuntime",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "Microsoft-DotNETCore-SampleProfiler",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "Microsoft-Extensions-DependencyInjection",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "System.Buffers.ArrayPoolEventSource",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "System.Net.Http",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "System.Net.NameResolution",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "System.Net.Sockets",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      {
+        "name": "System.Threading.Tasks.TplEventSource",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      },
+      // Microsoft
+      {
+        "name": "Microsoft"
+      },
+      // Aspnet Core
+      {
+        "name": "Microsoft.AspNetCore"
+      },
+      // EF Core
+      {
+        "name": "Microsoft.EntityFrameworkCore",
+        "keywords": "",
+        "eventLevel": "",
+        "arguments": {}
+      }
+    ],
+    "requestRundown": "",
+    "bufferSizeInMB": "256"
+  }
+}

@@ -52,6 +52,24 @@ namespace Ginsen.Net8.Async.Milestone.Api.Endpoints.V1
         .Produces(StatusCodes.Status404NotFound)
         .MapToApiVersion(1);
 
+      group.MapGet("/",
+        async (
+          [FromServices] ILogger<Program> logger,
+          [FromServices] IDummiesService dummiesService,
+          [FromQuery]string? partitionKey,
+          [FromQuery]string? rowKey,
+          CancellationToken cancellationToken) => {
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+              logger.LogInformation("Getting entity list with {PartitionKeySearchQuery}/{RowKeySearchQuery}", partitionKey, rowKey);
+            }
+            var result = await dummiesService.GetListAsync(partitionKey, rowKey, cancellationToken);
+            return Results.Ok(new GetDummiesResult(result.Select(e => new GetDummyResult(e.PartitionKey, e.RowKey, e.Message))));
+          })
+        .WithName("GetDummies")
+        .Produces<GetDummiesResult>(StatusCodes.Status200OK)
+        .MapToApiVersion(1);
+
       group.MapPost("/{partitionKey}/{rowKey}",
         async (
           HttpRequest request,
@@ -65,7 +83,7 @@ namespace Ginsen.Net8.Async.Milestone.Api.Endpoints.V1
             {
               logger.LogInformation("Trying to create entity {PartitionKey}/{RowKey} with message {Message}", partitionKey, rowKey, dto?.Message);
             }
-            var resultTask = dummiesService.CreateAsync(partitionKey.ToString(), rowKey.ToString(), dto?.Message ?? "", cancellationToken);
+            var resultTask = dummiesService.UpsertAsync(partitionKey.ToString(), rowKey.ToString(), dto?.Message ?? "", cancellationToken);
             var version = request.HttpContext.GetRequestedApiVersion();
             var result = await resultTask;
             return Results.Created($"/api/v{version}/azuretable/{result.PartitionKey}/{result.RowKey}", new CreateDummyResult(result.PartitionKey, result.RowKey, result.Message));

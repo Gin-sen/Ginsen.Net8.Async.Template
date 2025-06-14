@@ -1,0 +1,114 @@
+﻿@page "/azuretables"
+@using Ginsen.Net8.Async.Milestone.Api.Contracts.V1.Dummies
+@inject IAzureTablesHttpRepository AzureTablesHttpRepository
+@inject ILogger<AzureTables> Logger
+@attribute [StreamRendering]
+
+<PageTitle>Azure Tables</PageTitle>
+
+
+<button @onclick="@(e => CreateDummy("test"))">Add Dummy</button>
+
+<h1>Azure Tables</h1>
+
+<p>This component demonstrates how to query an API in OnInitializedAsync().</p>
+
+@if (dummies != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>PartitionKey</th>
+                <th>RowKey</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (dummies.Dummies.Count() == 0)
+            {
+                <tr>
+                    <td colspan="3">No dummies found.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var dummy in dummies.Dummies)
+                {
+                    <tr>
+                        <td>@dummy.PartitionKey</td>
+                        <td>@dummy.RowKey</td>
+                        <td>@dummy.Message</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else if (loadFailed)
+{
+    <h1>Sorry, we could not load this page due to an error.</h1>
+}
+else
+{
+    <h1>Loading...</h1>
+}
+
+@code {
+    private bool loadFailed;
+    private bool createFailed;
+    private GetDummiesResult? dummies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            loadFailed = false;
+
+            // Reset details to null to display the loading indicator
+            dummies = null;
+            dummies = await AzureTablesHttpRepository.GetAllAsync();
+            //await GetDummies();
+        }
+        catch (Exception ex)
+        {
+            loadFailed = true;
+            Logger.LogWarning(ex, "Failed to load dummies");
+        }
+    }
+
+    protected async Task GetDummies()
+    {
+        try
+        {
+            loadFailed = false;
+
+            // Reset details to null to display the loading indicator
+            dummies = null;
+            dummies = await AzureTablesHttpRepository.GetAllAsync();
+            //await GetDummies();
+        }
+        catch (Exception ex)
+        {
+            loadFailed = true;
+            Logger.LogWarning(ex, "Failed to load dummies");
+        }
+    }
+    protected async void CreateDummy(string? message)
+    {
+        try
+        {
+            createFailed = false;
+
+            await AzureTablesHttpRepository.UpsertAsync(new CreateDummyRequest(message));
+        }
+        catch (Exception ex)
+        {
+            createFailed = true;
+            Logger.LogWarning(ex, "Failed to create dummies");
+        }
+        finally
+        {
+            await GetDummies();
+        }
+    }
+}

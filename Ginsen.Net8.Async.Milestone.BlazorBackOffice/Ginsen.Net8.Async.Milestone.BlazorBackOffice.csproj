@@ -22,4 +22,8 @@
     <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.Api.Contracts/Ginsen.Net8.Async.Milestone.Api.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

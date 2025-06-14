@@ -17,15 +17,21 @@ public class DummiesService : IDummiesService
     _logger = logger;
   }
 
-  public async Task<Dummy> CreateAsync(string partitionKey, string rowKey, string? message, CancellationToken cancellationToken)
+  public async Task<Dummy> UpsertAsync(string partitionKey, string rowKey, string? message, CancellationToken cancellationToken = default)
   {
     var result = await _dummiesRepository.UpsertEntityAsync(new DummyEntity(partitionKey, rowKey, message), cancellationToken);
     return new Dummy(result.PartitionKey, result.RowKey, result.Message);
   }
 
-  public async Task<Dummy> GetAsync(string partitionKey, string rowKey, CancellationToken cancellationToken)
+  public async Task<Dummy> GetAsync(string partitionKey, string rowKey, CancellationToken cancellationToken = default)
   {
     var result = await _dummiesRepository.GetEntityAsync(partitionKey, rowKey, cancellationToken);
     return new Dummy(result.PartitionKey, result.RowKey, result.Message);
+  }
+
+  public async Task<IEnumerable<Dummy>> GetListAsync(string? partitionKey = "*", string? rowKey = "*", CancellationToken cancellationToken = default)
+  {
+    var result = await _dummiesRepository.GetEntityListAsync(partitionKey ?? "*", rowKey ?? "*", 1, 10, cancellationToken);
+    return result.Select(e => new Dummy(e.PartitionKey, e.RowKey, e.Message));
   }
 }

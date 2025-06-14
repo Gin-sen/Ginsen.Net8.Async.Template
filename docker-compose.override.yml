@@ -133,6 +133,8 @@ services:
       - "16686:16686"
 
   prometheus:
+    extra_hosts:
+      - host.docker.internal:host-gateway
     volumes:
       - ./compose/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:

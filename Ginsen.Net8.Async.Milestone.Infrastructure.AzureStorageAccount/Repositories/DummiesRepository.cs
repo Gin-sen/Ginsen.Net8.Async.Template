@@ -32,4 +32,22 @@ public class DummiesRepository : IDummiesRepository
     TableClient tableClient = _tableServiceClient.GetTableClient(TableName);
     await tableClient.DeleteEntityAsync(partitionKey, rowKey, cancellationToken: cancellationToken);
   }
+
+  public async Task<IEnumerable<DummyEntity>> GetEntityListAsync(
+    string partitionKey = "*",
+    string rowKey = "*",
+    int pageNumber = 1,
+    int pageSize = 10,
+    CancellationToken cancellationToken = default)
+  {
+    TableClient tableClient = _tableServiceClient.GetTableClient(TableName);
+    var query = tableClient.QueryAsync<DummyEntity>(e => e.PartitionKey == partitionKey && e.RowKey == rowKey, maxPerPage: pageSize, cancellationToken: cancellationToken);
+    var result = new List<DummyEntity>();
+    await foreach (var entity in query.WithCancellation(cancellationToken))
+    {
+        result.Add(entity);
+    }
+    return result;
+
+  }
 }
