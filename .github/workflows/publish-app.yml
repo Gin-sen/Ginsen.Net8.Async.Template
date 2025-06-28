@@ -62,7 +62,20 @@ jobs:
           target: final-worker
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+  openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+         dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Generate OpenAPI docs
+        run: |
+          cd Ginsen.Net8.Async.Milestone.Api
+          dotnet add package Microsoft.Extensions.ApiDescription.Server
+          dotnet build
+          cat obj/Ginsen.Net8.Async.Milestone.Api.json
   milestone:
     runs-on: ubuntu-latest
     steps:

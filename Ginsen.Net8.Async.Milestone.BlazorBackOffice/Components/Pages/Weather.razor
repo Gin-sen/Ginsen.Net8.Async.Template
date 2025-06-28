@@ -1,11 +1,13 @@
 ﻿@page "/weather"
 @attribute [StreamRendering]
+@inject ILogger<Weather> Logger
 
 <PageTitle>Weather</PageTitle>
 
 <h1>Weather</h1>
 
 <p>This component demonstrates showing data.</p>
+<p>All of the rendering is done by the server.</p>
 
 @if (forecasts == null)
 {
@@ -41,6 +43,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Logger.LogInformation("Weather component initialized. Starting to load forecasts...");
         // Simulate asynchronous loading to demonstrate streaming rendering
         await Task.Delay(500);
 
@@ -52,6 +55,9 @@ else
             TemperatureC = Random.Shared.Next(-20, 55),
             Summary = summaries[Random.Shared.Next(summaries.Length)]
         }).ToArray();
+        // It isn't necessary to call ComponentBase.OnInitializedAsync unless a custom base class is used with custom logic.
+        // For more information, see the Base class lifecycle methods section.
+        // await base.OnInitializedAsync();
     }
 
     private class WeatherForecast

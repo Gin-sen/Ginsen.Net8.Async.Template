@@ -1,20 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.17" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
     <PackageReference Include="OpenTelemetry" Version="1.11.2" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.11.2" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.2" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.11.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.1" />
     <PackageReference Include="Serilog" Version="4.2.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
@@ -23,22 +26,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Project coupling (WASM and Blazor Server) -->
-    <ProjectReference Include="..\Ginsen.Net8.Async.Milestone.BlazorBackOffice.Client\Ginsen.Net8.Async.Milestone.BlazorBackOffice.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.14" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Reference the source generator for HttpClientFactory -->
-    <ProjectReference Include="..\Ginsen.Net8.Async.Milestone.HttpClientGenerator\Ginsen.Net8.Async.Milestone.HttpClientGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="appsettings.Docker.json">
+    <Content Update="wwwroot/appsettings.Docker.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-
+  <ItemGroup>
+    <Content Remove="nginx.conf" />
+  </ItemGroup>
 </Project>

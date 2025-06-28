@@ -1,0 +1,28 @@
+﻿@page "/render-mode-2"
+@rendermode InteractiveAuto
+@inject ILogger<RenderMode2> Logger
+
+<PageTitle>RenderMode2</PageTitle>
+
+<h1>RenderMode2</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        Logger.LogInformation("Incrementing count from {CurrentCount} to {NewCount}", currentCount, currentCount + 1);
+        currentCount++;
+    }
+    protected override void OnInitialized()
+    {
+      Logger.LogInformation("Render mode 2 component initialized.");
+      // It isn't necessary to call ComponentBase.OnInitializedAsync unless a custom base class is used with custom logic.
+      // For more information, see the Base class lifecycle methods section.
+      // await base.OnInitializedAsync();
+    }
+}

@@ -1,5 +1,15 @@
 {
   "editor.tabSize": 2,
   "debug.terminal.clearBeforeReusing": true,
-  "dotnet.defaultSolution": "Ginsen.Net8.Async.sln"
+  "dotnet.defaultSolution": "Ginsen.Net8.Async.sln",
+  "dotnetAcquisitionExtension.existingDotnetPath": [
+    {
+        "extensionId": "ms-dotnettools.csharp",
+        "path": "/home/gin-sen/.dotnet/dotnet"
+    },
+     {
+        "extensionId": "ms-dotnettools.csdevkit",
+        "path": "/home/gin-sen/.dotnet/dotnet"
+    }
+  ]
 }

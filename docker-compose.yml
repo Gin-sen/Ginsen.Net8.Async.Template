@@ -35,6 +35,17 @@ services:
       # dockerfile: ginsen-net8-async-milestone-BlazorBackOffice/Dockerfile
     networks:
       - backend-net
+  ginsen-net8-async-milestone-backoffice-client:
+    image: ${CONTAINER_REGISTRY-ghcr.io/gin-sen/}ginsen-net8-async-milestone-backoffice-client:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: final-backoffice-client
+      args:
+        - BUILD_CONFIGURATION=${BUILD_CONFIGURATION-Debug}
+      # dockerfile: ginsen-net8-async-milestone-BlazorBackOffice.Client/Dockerfile
+    networks:
+      - backend-net
       
   rabbit:
     image: rabbitmq:4-management

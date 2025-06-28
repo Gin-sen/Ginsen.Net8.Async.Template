@@ -62,6 +62,27 @@ services:
           cpus: '0.250'
           memory: 512M
 
+  ginsen-net8-async-milestone-backoffice-client:
+    environment:
+      - DOTNET_ENVIRONMENT=Docker
+      # Dotnet monitor
+      - DOTNET_DiagnosticPorts=/diag/dotnet-monitor.sock
+      # OpenTelemetry environmental variables:
+      - OTEL_SERVICE_NAME=ginsen-net8-async-milestone-backoffice-client
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      - ginsen-net8-async-milestone-api
+      - otel-collector
+    volumes:
+      - diagvol-backoffice:/diag
+    ports:
+      - "8081:80"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.250'
+          memory: 512M
+
   rabbit:
     labels:
       NAME: "rabbit"
