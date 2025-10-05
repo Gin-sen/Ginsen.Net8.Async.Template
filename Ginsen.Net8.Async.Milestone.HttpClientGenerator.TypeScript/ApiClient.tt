@@ -1,0 +1,64 @@
+<#@ output extension=".ts" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ parameter type="List<RecordInfo>" name="Dtos" #>
+<#@ parameter type="List<EndpointInfo>" name="Endpoints" #>
+
+// DTO Interfaces
+<#
+foreach (var dto in Dtos)
+{
+#>
+export interface <#= dto.Name #> {
+<#
+    foreach (var prop in dto.Properties)
+    {
+#>  <#= prop.Name #>: <#= prop.Type #>;
+<#
+    }
+#>}
+<#
+}
+#>
+
+// ApiClient class
+export class ApiClient {
+  constructor(private baseUrl: string) {}
+
+<#
+foreach (var ep in Endpoints)
+{
+    var requestParam = !string.IsNullOrEmpty(ep.RequestType) ? $"request: {ep.RequestType}, " : "";
+#>
+  async <#= ep.Name #>(<#= requestParam #>signal?: AbortSignal): Promise<<#= ep.ResponseType ?? "any" #> | null> {
+    try {
+<#
+    if (ep.HttpMethod == "GET")
+    {
+#>      const res = await fetch(`${this.baseUrl}<#= ep.Route #>`, { method: 'GET', signal });
+<#
+    }
+    else if (ep.HttpMethod == "POST")
+    {
+#>      const res = await fetch(`${this.baseUrl}<#= ep.Route #>`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(request), signal });
+<#
+    }
+    else
+    {
+#>      // TODO: Implement <#= ep.HttpMethod #> method
+      const res = await fetch(`${this.baseUrl}<#= ep.Route #>`, { method: '<#= ep.HttpMethod #>', signal });
+<#
+    }
+#>      if (!res.ok) return null;
+      return await res.json() as <#= ep.ResponseType ?? "any" #>;
+    } catch (e) {
+      // Optionally log error
+      return null;
+    }
+  }
+
+<#
+}
+#>
+}

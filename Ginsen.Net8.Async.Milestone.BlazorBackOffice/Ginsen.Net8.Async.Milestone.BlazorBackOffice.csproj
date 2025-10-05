@@ -24,13 +24,9 @@
 
   <ItemGroup>
     <!-- Project coupling (WASM and Blazor Server) -->
+    <ProjectReference Include="../Ginsen.Net8.Async.Milestone.HttpClientGenerator.Dotnet/Ginsen.Net8.Async.Milestone.HttpClientGenerator.Dotnet.csproj" />
     <ProjectReference Include="..\Ginsen.Net8.Async.Milestone.BlazorBackOffice.Client\Ginsen.Net8.Async.Milestone.BlazorBackOffice.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.14" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Reference the source generator for HttpClientFactory -->
-    <ProjectReference Include="..\Ginsen.Net8.Async.Milestone.HttpClientGenerator\Ginsen.Net8.Async.Milestone.HttpClientGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
